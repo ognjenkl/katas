@@ -1,6 +1,6 @@
-package test;
+package helloworld;
 
-public class TestT {
+public class HelloWorld {
     public String get() {
         return "Hello world";
     }

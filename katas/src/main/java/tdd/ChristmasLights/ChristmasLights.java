@@ -3,7 +3,7 @@ package tdd.ChristmasLights;
 /**
  * Probably a Fire Hazard
  * Because your neighbors keep defeating you in the holiday house decorating contest year after year, you’ve decided to deploy one million lights in a 1000x1000 grid. Furthermore, because you’ve been especially nice this year, Santa has mailed you instructions on how to display the ideal lighting configuration.Lights in your grid are numbered from 0 to 999 in each direction; the lights at each corner are at 0,0, 0,999, 999,999, and 999,0. The instructions include whether to turn on, turn off, or toggle various inclusive ranges given as coordinate pairs. Each coordinate pair represents opposite corners of a rectangle, inclusive; a coordinate pair like 0,0 through 2,2 therefore refers to 9 lights in a 3x3 square. The lights all start turned off. To defeat your neighbors this year, all you have to do is set up your lights by doing the instructions Santa sent you in order.
- *
+ * <p>
  * Examples
  * turn on 0,0 through 999,999 would turn on (or leave on) every light.
  * toggle 0,0 through 999,0 would toggle the first line of 1000 lights, turning off the ones that were on, and turning on the ones that were off.
@@ -19,17 +19,17 @@ package tdd.ChristmasLights;
  * toggle 720,196 through 897,994
  * toggle 831,394 through 904,860
  * After following the instructions, how many lights are lit?
- *
+ * <p>
  * Part Two
  * You just finish implementing your winning light pattern when you realize you mistranslated Santa’s message from Ancient Nordic Elvish. The light grid you bought actually has individual brightness controls; each light can have a brightness of zero or more. The lights all start at zero.
- *
+ * <p>
  * The phrase turn on actually means that you should increase the brightness of those lights by 1.
  * The phrase turn off actually means that you should decrease the brightness of those lights by 1, to a minimum of zero.
  * The phrase toggle actually means that you should increase the brightness of those lights by 2.
  * What is the total brightness of all lights combined after following Santa’s instructions?
- *
+ * <p>
  * For example:
- *
+ * <p>
  * turn on 0,0 through 0,0 would increase the total brightness by 1.
  * toggle 0,0 through 999,999 would increase the total brightness by 2000000.
  */
@@ -40,17 +40,19 @@ public class ChristmasLights {
 
     private static final int MAX_X = 1000;
     private static final int MAX_Y = 1000;
-    private final String[][] matrix;
+    private final int[][] matrix;
     private int counterOffs;
     private int counterOns;
+    private int sumBrightnes;
 
     public ChristmasLights() {
-        matrix = new String[MAX_X][MAX_Y];
+        matrix = new int[MAX_X][MAX_Y];
         counterOffs = 0;
         counterOns = 0;
+        sumBrightnes = 0;
         for (int i = 0; i < MAX_X; i++)
             for (int j = 0; j < MAX_Y; j++)
-                matrix[i][j] = OFF;
+                matrix[i][j] = 0;
     }
 
     public void printLights(int x1, int y1, int x2, int y2) {
@@ -62,15 +64,13 @@ public class ChristmasLights {
         System.out.println();
     }
 
-    public void countLights() throws Exception {
+    public void countLights() {
         for (int i = 0; i < MAX_X; i++)
             for (int j = 0; j < MAX_Y; j++)
-                if (matrix[i][j].equals(OFF))
+                if (matrix[i][j] == 0)
                     counterOffs++;
-                else if (matrix[i][j].equals(ON))
-                    counterOns++;
                 else
-                    throw new Exception("Light is not ON nor OFF");
+                    counterOns++;
 
         System.out.println();
         System.out.println("Number of lights  ON: " + counterOns);
@@ -78,17 +78,21 @@ public class ChristmasLights {
         System.out.println();
     }
 
-    public void turn(int x1, int y1, int x2, int y2, final String light) {
+    public void turn(int x1, int y1, int x2, int y2, final int light) {
         for (int i = x1; i <= x2; i++)
-            for (int j = y1; j <= y2; j++)
-                matrix[i][j] = light;
+            for (int j = y1; j <= y2; j++) {
+                matrix[i][j] += light;
+                if (matrix[i][j] < 0)
+                    matrix[i][j] = 0;
+            }
     }
 
     public void turnOn(int x1, int y1, int x2, int y2) {
-        turn (x1, y1, x2, y2, ON);
+        turn(x1, y1, x2, y2, 1);
     }
+
     public void turnOff(int x1, int y1, int x2, int y2) {
-        turn (x1, y1, x2, y2, OFF);
+        turn(x1, y1, x2, y2, -1);
     }
 
     public int getCounterOffs() {
@@ -102,6 +106,23 @@ public class ChristmasLights {
     public void toggle(int x1, int y1, int x2, int y2) {
         for (int i = x1; i <= x2; i++)
             for (int j = y1; j <= y2; j++)
-                matrix[i][j] = matrix[i][j].equals(ON) ?  OFF : ON;
+                matrix[i][j] += 2;
+    }
+
+    public int calculateBrightness() {
+        for (int i = 0; i < MAX_X; i++)
+            for (int j = 0; j < MAX_Y; j++) {
+                sumBrightnes += matrix[i][j];
+            }
+
+        System.out.println();
+        System.out.println("Brightness: " + sumBrightnes);
+        System.out.println();
+
+        return sumBrightnes;
+    }
+
+    public int getSumBrightnes() {
+        return sumBrightnes;
     }
 }

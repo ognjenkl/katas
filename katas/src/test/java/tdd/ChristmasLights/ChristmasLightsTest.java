@@ -74,15 +74,14 @@ public class ChristmasLightsTest {
         christmasLights.toggle(0, 0, 1, 1);
         christmasLights.countLights();
 
-        assertEquals(1000000, christmasLights.getCounterOffs());
-        assertEquals(0, christmasLights.getCounterOns());
+        assertEquals(12, christmasLights.calculateBrightness());
 
         christmasLights.printLights(0, 0, 3, 3);
 
     }
 
     @Test
-    void toggleFirstColumn() throws Exception {
+    void togglePartlyFirstColumn() throws Exception {
         christmasLights.turnOn(0, 0, 9, 0);
         christmasLights.turnOn(20, 0, 29, 0);
         christmasLights.printLights(0, 0, 30, 3);
@@ -90,14 +89,13 @@ public class ChristmasLightsTest {
         christmasLights.toggle(0, 0, 29, 0);
         christmasLights.countLights();
 
-        assertEquals(999990, christmasLights.getCounterOffs());
-        assertEquals(10, christmasLights.getCounterOns());
+        assertEquals(80, christmasLights.calculateBrightness());
 
         christmasLights.printLights(0, 0, 30, 3);
     }
 
     @Test
-    void turnOn_toggleFirlsLine_turnOfCenter() throws Exception {
+    void turnOn_toggleFirtColumn_turnOffCenter() throws Exception {
         christmasLights.turnOn(0, 0, 999, 999);
         christmasLights.printLights(0, 0, 3, 3);
 
@@ -109,12 +107,11 @@ public class ChristmasLightsTest {
 
         christmasLights.countLights();
 
-        assertEquals(1004, christmasLights.getCounterOffs());
-        assertEquals(998996, christmasLights.getCounterOns());
+        assertEquals(1001996, christmasLights.calculateBrightness());
     }
 
     @Test
-    void testInstructions() throws Exception {
+    void santasInstructions() throws Exception {
         christmasLights.turnOn(887, 9, 959, 629);
         christmasLights.turnOn(454, 398, 844, 448);
         christmasLights.turnOff(539, 243, 559, 965);
@@ -127,5 +124,18 @@ public class ChristmasLightsTest {
 
         christmasLights.countLights();
         christmasLights.printLights(610,610,800, 800);
+        christmasLights.calculateBrightness();
     }
+
+    @Test
+    void countBrightnessOfOne() {
+        assertEquals(0, christmasLights.calculateBrightness());
+    }
+
+    @Test
+    void countBrightnessOfOneTurnOn() {
+        christmasLights.turnOn(0,0,0,0);
+        assertEquals(1, christmasLights.calculateBrightness());
+    }
+
 }
