@@ -1,6 +1,9 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+
+*.idea
+
 # CodeStream ignored files
 /../../katas\.idea/codestream.xml
 # Datasource local storage ignored files
