@@ -22,13 +22,14 @@ public class HammingNumber {
 
 
     public long hamming(long n) {
-        long countSmallest = 0;
-        for (long i = 1; countSmallest < n; i++) {
+        if (n < 7)
+            return n;
+        long countSmallest = 6;
+        for (long i = 7; countSmallest < n; i++) {
             if (!isHammingNumberRecursion(i)) {
                 continue;
             }
             if (++countSmallest == n) {
-                System.out.println(countSmallest + ". " + i);
                 return i;
             }
         }
@@ -36,7 +37,7 @@ public class HammingNumber {
     }
 
     boolean isHammingNumberRecursion(long n) {
-        if (n == 1)
+        if (n < 7)
             return true;
         if (n % 2 == 0)
             return isHammingNumberRecursion(n / 2);
