@@ -1,5 +1,8 @@
 package tdd.hammingNumber;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
 A Hamming number is a positive integer of the form 2i3j5k,
 for some non-negative integers i, j, and k.
@@ -22,29 +25,31 @@ public class HammingNumber {
 
 
     public long hamming(long n) {
-        if (n < 7)
-            return n;
-        long countSmallest = 6;
-        for (long i = 7; countSmallest < n; i++) {
-            if (!isHammingNumberRecursion(i)) {
-                continue;
-            }
-            if (++countSmallest == n) {
-                return i;
-            }
-        }
-        return 0;
-    }
+        long two = 2L;
+        long three = 3L;
+        long five = 5L;
+        long i = 0L;
+        long j = 0L;
+        long k = 0L;
+        long next = 1L;
+        long nextOfTwo = two;
+        long nextOfThree = three;
+        long nextOfFive = five;
+        Map<Long, Long> hammingMap = new HashMap<>();
+        hammingMap.put(0L, 1L);
 
-    boolean isHammingNumberRecursion(long n) {
-        if (n < 7)
-            return true;
-        if (n % 2 == 0)
-            return isHammingNumberRecursion(n / 2);
-        if (n % 3 == 0)
-            return isHammingNumberRecursion(n / 3);
-        if (n % 5 == 0)
-            return isHammingNumberRecursion(n / 5);
-        return false;
+
+        for (long ii = 1L; ii < n; ii++) {
+            next = Math.min(nextOfTwo, Math.min(nextOfThree, nextOfFive));
+            hammingMap.put(ii, next);
+
+            if (next == nextOfTwo)
+                nextOfTwo = two * hammingMap.get(++i);
+            if (next == nextOfThree)
+                nextOfThree = three * hammingMap.get(++j);
+            if (next == nextOfFive)
+                nextOfFive = five * hammingMap.get(++k);
+        }
+        return next;
     }
 }
