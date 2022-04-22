@@ -1,8 +1,5 @@
 package tdd.hammingNumber;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /*
 A Hamming number is a positive integer of the form 2i3j5k,
 for some non-negative integers i, j, and k.
@@ -24,39 +21,29 @@ Hamming numbers without timing out.
 public class HammingNumber {
 
 
-    public int hamming(int n) {
-
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
-        list.add(6);
-        list.add(8);
-
-        for (int i = 9; list.size() < n; i++) {
-            if (isHummingNumber(i))
-                list.add(i);
+    public long hamming(long n) {
+        long countSmallest = 0;
+        for (long i = 1; countSmallest < n; i++) {
+            if (!isHammingNumberRecursion(i)) {
+                continue;
+            }
+            if (++countSmallest == n) {
+                System.out.println(countSmallest + ". " + i);
+                return i;
+            }
         }
-
-        System.out.println(list);
-        System.out.println(n + ": " + list.get(n - 1));
-        return list.get(n - 1);
+        return 0;
     }
 
-    private boolean isHummingNumber(int n) {
+    boolean isHammingNumberRecursion(long n) {
         if (n == 1)
             return true;
         if (n % 2 == 0)
-            return isHummingNumber(n / 2);
-
+            return isHammingNumberRecursion(n / 2);
         if (n % 3 == 0)
-            return isHummingNumber(n / 3);
-
+            return isHammingNumberRecursion(n / 3);
         if (n % 5 == 0)
-            return isHummingNumber(n / 5);
-
+            return isHammingNumberRecursion(n / 5);
         return false;
     }
 }
