@@ -1,0 +1,59 @@
+package tdd.stringcalculator;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
+public class StringCalculator2Test {
+
+    private StringCalculator2 stringCalculator;
+
+    @BeforeEach
+    void setUp() {
+        stringCalculator = makeStringCalculator2();
+    }
+
+    @Test
+    void add_shouldReturnDefaultValue_NoParameters() {
+        assertEquals(StringCalculator2.DEFAULT_VALUE, stringCalculator.add(""));
+    }
+
+    @Test
+    void add_shouldReturnDefaultValue_EmptyParameters() {
+        assertEquals(StringCalculator2.DEFAULT_VALUE, stringCalculator.add("    "));
+    }
+
+    @Test
+    void add_shouldReturnDefaultValue_Null() {
+        assertEquals(StringCalculator2.DEFAULT_VALUE, stringCalculator.add(null));
+    }
+
+    @Test
+    void add_shouldReturnOne_OneParameter() {
+        assertEquals(1, stringCalculator.add("1"));
+    }
+
+    @Test
+    void add_shouldReturnTwo_OneParameter() {
+        assertEquals(2, stringCalculator.add("2"));
+    }
+
+    @Test
+    void add_shouldCalculate3_ForOneAndTwoAsParameters() {
+        assertEquals(3, stringCalculator.add("1,2"));
+    }
+
+    private StringCalculator2 makeStringCalculator2() {
+        return new StringCalculator2Impl();
+    }
+
+    @Test
+    void add_shouldReturn4_forOneAndThreeAsParameters() {
+        assertEquals(4, stringCalculator.add("1,3"));
+    }
+}
