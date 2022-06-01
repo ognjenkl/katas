@@ -29,11 +29,6 @@ public class StringCalculator2Test {
     }
 
     @Test
-    void add_shouldReturnDefaultValue_Null() {
-        assertEquals(StringCalculator2.DEFAULT_VALUE, stringCalculator.add(null));
-    }
-
-    @Test
     void add_shouldReturnOne_OneParameter() {
         assertEquals(1, stringCalculator.add("1"));
     }
@@ -55,5 +50,20 @@ public class StringCalculator2Test {
     @Test
     void add_shouldReturn4_forOneAndThreeAsParameters() {
         assertEquals(4, stringCalculator.add("1,3"));
+    }
+
+    @Test
+    void add_OneTwoAndThreeParameters_ReturnSix() {
+        assertEquals(6, stringCalculator.add("1,2,3"));
+    }
+
+    @Test
+    void add_numberOfParametersFour_ReturnTen() {
+        assertEquals(10, stringCalculator.add("1,2,3,4"));
+    }
+
+    @Test
+    void add_numberOfParamsThreeWithNewLines_ReturnSix() {
+        assertEquals(6, stringCalculator.add("1,2\n3"));
     }
 }
