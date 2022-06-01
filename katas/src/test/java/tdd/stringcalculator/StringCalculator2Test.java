@@ -114,4 +114,20 @@ class StringCalculator2Test {
         assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
         assertEquals("negatives not allowed: [-1, -2]", negativeNumberException.getMessage());
     }
+
+    @Test
+    void getCalledCount_calculatesHowManyTimesAddWasCalled_Return1() {
+        stringCalculator.add("1,2");
+        Integer count = stringCalculator.getCalledCount();
+        assertEquals(1, count);
+    }
+
+    @Test
+    void getCalledCount_callAdd2_Return2() {
+        stringCalculator.add("1,2");
+        stringCalculator.add("//;\n1;3;2");
+        Integer count = stringCalculator.getCalledCount();
+        assertEquals(2, count);
+    }
+
 }

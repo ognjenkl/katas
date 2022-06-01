@@ -7,10 +7,18 @@ import java.util.stream.Collectors;
 
 public class StringCalculator2Impl implements StringCalculator2 {
 
+    private Integer addCallCount = 0;
+
     @Override
     public Integer add(String numbers) {
+        addCallCount++;
         List<Integer> numberList = parse(numbers);
         return sum(numberList);
+    }
+
+    @Override
+    public Integer getCalledCount() {
+        return addCallCount;
     }
 
     private List<Integer> parse(String numbers) {
