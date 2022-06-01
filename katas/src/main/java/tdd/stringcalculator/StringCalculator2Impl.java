@@ -3,6 +3,7 @@ package tdd.stringcalculator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StringCalculator2Impl implements StringCalculator2 {
 
@@ -36,6 +37,21 @@ public class StringCalculator2Impl implements StringCalculator2 {
             numberList.add(DEFAULT_VALUE);
         else
             Arrays.stream(numbers.split(delimiterRegex)).forEach(n -> numberList.add(Integer.valueOf(n)));
+
+        List<Integer> negatives = getNegativeNumbers(numberList);
+        if (!negatives.isEmpty())
+            throw new NegativeNumberException("negatives not allowed: " + negatives);
         return numberList;
+    }
+
+    private List<Integer> getNegativeNumbers(List<Integer> numberList) {
+        return numberList.stream().filter(n -> n < 0).collect(Collectors.toList());
+    }
+
+
+    class NegativeNumberException extends RuntimeException {
+        NegativeNumberException(String message) {
+            super(message);
+        }
     }
 }

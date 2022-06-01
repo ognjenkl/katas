@@ -4,8 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import tdd.stringcalculator.StringCalculator2Impl.NegativeNumberException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 class StringCalculator2Test {
@@ -74,5 +75,43 @@ class StringCalculator2Test {
     @Test
     void add_delimiterDefinedInString_Return3() {
         assertEquals(3, stringCalculator.add("//;\n1;2"));
+    }
+
+    @Test
+    void add_delimiterDefinedInString_Return6() {
+        assertEquals(6, stringCalculator.add("//;\n1;2;3"));
+    }
+
+    @Test
+    void add_ifThereIsNegativNumber_ThrowExceptionWithThatNumberInMessage() {
+        NegativeNumberException negativeNumberException = assertThrows(
+                NegativeNumberException.class, () -> stringCalculator.add(("-1")));
+        assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
+        System.out.println(negativeNumberException.getMessage());
+        assertEquals("negatives not allowed: [-1]", negativeNumberException.getMessage());
+    }
+
+    @Test
+    void add_ifThereIsTwoNegativNumbers_ThrowExceptionWithThatNumbersInMessage() {
+        NegativeNumberException negativeNumberException = assertThrows(
+                NegativeNumberException.class, () -> stringCalculator.add(("-1,3,-2")));
+        assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
+        assertEquals("negatives not allowed: [-1, -2]", negativeNumberException.getMessage());
+    }
+
+    @Test
+    void add_ifThereIsTwoNegativNumbers_ThrowExceptionWithThatNumbersInMessage2() {
+        NegativeNumberException negativeNumberException = assertThrows(
+                NegativeNumberException.class, () -> stringCalculator.add(("-1\n3,-2")));
+        assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
+        assertEquals("negatives not allowed: [-1, -2]", negativeNumberException.getMessage());
+    }
+
+    @Test
+    void add_ifThereIsTwoNegativNumbers_ThrowExceptionWithThatNumbersInMessage3() {
+        NegativeNumberException negativeNumberException = assertThrows(
+                NegativeNumberException.class, () -> stringCalculator.add(("//;\n-1;3;-2")));
+        assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
+        assertEquals("negatives not allowed: [-1, -2]", negativeNumberException.getMessage());
     }
 }
