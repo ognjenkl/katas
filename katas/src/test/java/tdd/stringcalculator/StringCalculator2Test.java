@@ -130,4 +130,15 @@ class StringCalculator2Test {
         assertEquals(2, count);
     }
 
+    @Test
+    void add_ignoreNumbersGT1000_Return2() {
+        Integer sum = stringCalculator.add("2,1001");
+        assertEquals(2, sum);
+    }
+
+    @Test
+    void add_ignoreNumbersGT1000_Return1001() {
+        Integer sum = stringCalculator.add("2,1001\n999");
+        assertEquals(1001, sum);
+    }
 }

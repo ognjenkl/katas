@@ -40,16 +40,28 @@ public class StringCalculator2Impl implements StringCalculator2 {
     }
 
     private List<Integer> parseNumbers(String numbers, String delimiterRegex) {
-        List<Integer> numberList = new ArrayList<>();
+        List<Integer> numberList;
+
         if (numbers.isBlank())
-            numberList.add(DEFAULT_VALUE);
-        else
-            Arrays.stream(numbers.split(delimiterRegex)).forEach(n -> numberList.add(Integer.valueOf(n)));
+            numberList = new ArrayList<>(DEFAULT_VALUE);
+        else {
+            numberList = getNumberList(numbers, delimiterRegex);
+        }
 
         List<Integer> negatives = getNegativeNumbers(numberList);
         if (!negatives.isEmpty())
             throw new NegativeNumberException("negatives not allowed: " + negatives);
+
+        numberList = ignoreGreaterThanThousand(numberList);
         return numberList;
+    }
+
+    private List<Integer> getNumberList(String numbers, String delimiterRegex) {
+        return Arrays.stream(numbers.split(delimiterRegex)).map(Integer::valueOf).collect(Collectors.toList());
+    }
+
+    private List<Integer> ignoreGreaterThanThousand(List<Integer> numberList) {
+        return numberList.stream().filter(n -> n <= 1000).collect(Collectors.toList());
     }
 
     private List<Integer> getNegativeNumbers(List<Integer> numberList) {
