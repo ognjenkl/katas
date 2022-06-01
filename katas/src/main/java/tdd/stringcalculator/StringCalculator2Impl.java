@@ -8,26 +8,19 @@ public class StringCalculator2Impl implements StringCalculator2 {
 
     @Override
     public Integer add(String numbers) {
-        Integer retVal;
-        String delimiterComma = ",";
-        String delimiterNewLine = "\n";
+        List<Integer> numberList = parse(numbers);
+        return sum(numberList);
+    }
 
-        String delimiterRegex = getDelimiterRegex(delimiterComma, delimiterNewLine);
-        boolean containsDelimiters = containsDelimiters(numbers, delimiterComma, delimiterNewLine);
-        if (numbers.startsWith("//")){
-            String delimiter = numbers.charAt(2) + "";
-            String numbersSubstring = numbers.substring(4);
-            List<Integer> numberList = parseNumbers(numbersSubstring, delimiter);
-            retVal = sum(numberList);
-        } else if (containsDelimiters) {
-            List<Integer> numbersList = parseNumbers(numbers, delimiterRegex);
-            retVal = sum(numbersList);
-        } else if (numbers.isBlank()) {
-            retVal = DEFAULT_VALUE;
-        } else
-            retVal = Integer.valueOf(numbers);
+    private List<Integer> parse(String numbers) {
+        String delimiterRegex = "," + "|" + "\n";
 
-        return retVal;
+        if (numbers.startsWith("//")) {
+            delimiterRegex = numbers.charAt(2) + "";
+            numbers = numbers.substring(4);
+        }
+
+        return parseNumbers(numbers, delimiterRegex);
     }
 
     private Integer sum(List<Integer> numbersList) {
@@ -39,15 +32,10 @@ public class StringCalculator2Impl implements StringCalculator2 {
 
     private List<Integer> parseNumbers(String numbers, String delimiterRegex) {
         List<Integer> numberList = new ArrayList<>();
-        Arrays.stream(numbers.split(delimiterRegex)).forEach(n -> numberList.add(Integer.valueOf(n)));
+        if (numbers.isBlank())
+            numberList.add(DEFAULT_VALUE);
+        else
+            Arrays.stream(numbers.split(delimiterRegex)).forEach(n -> numberList.add(Integer.valueOf(n)));
         return numberList;
-    }
-
-    private boolean containsDelimiters(String numbers, String delimiterComma, String delimiterNewLine) {
-        return numbers.contains(delimiterComma) | numbers.contains(delimiterNewLine);
-    }
-
-    private String getDelimiterRegex(String delimiterComma, String delimiterNewLine) {
-        return delimiterComma + "|" + delimiterNewLine;
     }
 }
