@@ -66,4 +66,14 @@ public class StringCalculator2Test {
     void add_numberOfParamsThreeWithNewLines_ReturnSix() {
         assertEquals(6, stringCalculator.add("1,2\n3"));
     }
+
+    @Test
+    void add_numberOfParamsFourWithNewLineAsDelimiter_ReturnEleven() {
+        assertEquals(11, stringCalculator.add("1,2\n3,5"));
+    }
+
+    @Test
+    void add_delimiterDefinedInString_Return3() {
+        assertEquals(3, stringCalculator.add("//;\n1;2"));
+    }
 }

@@ -8,13 +8,18 @@ public class StringCalculator2Impl implements StringCalculator2 {
 
     @Override
     public Integer add(String numbers) {
-        Integer retVal = DEFAULT_VALUE;
+        Integer retVal;
         String delimiterComma = ",";
         String delimiterNewLine = "\n";
-        String delimiterRegex = getDelimiterRegex(delimiterComma, delimiterNewLine);
 
+        String delimiterRegex = getDelimiterRegex(delimiterComma, delimiterNewLine);
         boolean containsDelimiters = containsDelimiters(numbers, delimiterComma, delimiterNewLine);
-        if (containsDelimiters) {
+        if (numbers.startsWith("//")){
+            String delimiter = numbers.charAt(2) + "";
+            String numbersSubstring = numbers.substring(4);
+            List<Integer> numberList = parseNumbers(numbersSubstring, delimiter);
+            retVal = sum(numberList);
+        } else if (containsDelimiters) {
             List<Integer> numbersList = parseNumbers(numbers, delimiterRegex);
             retVal = sum(numbersList);
         } else if (numbers.isBlank()) {
