@@ -3,33 +3,44 @@ package tdd.stringcalculator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class StringCalculator2Impl implements StringCalculator2 {
 
-    private Integer addCallCount = 0;
+    private Integer countAddMethodCalls = 0;
 
     @Override
     public Integer add(String numbers) {
-        addCallCount++;
+        countAddMethodCalls++;
         List<Integer> numberList = parse(numbers);
         return sum(numberList);
     }
 
     @Override
     public Integer getCalledCount() {
-        return addCallCount;
+        return countAddMethodCalls;
     }
 
     private List<Integer> parse(String numbers) {
-        String delimiterRegex = "," + "|" + "\n";
+        String commaDelimiter = ",";
+        String newLineDelimiter = "\n";
+        String delimiterRegex = commaDelimiter + "|" + newLineDelimiter;
 
         if (numbers.startsWith("//")) {
-            delimiterRegex = numbers.charAt(2) + "";
-            numbers = numbers.substring(4);
+            String[] numbersArray = splitNumbers(numbers.substring(2), newLineDelimiter);
+            delimiterRegex = Pattern.quote(parseDelimiter(numbersArray[0]));
+            numbers = numbersArray[1];
         }
 
         return parseNumbers(numbers, delimiterRegex);
+    }
+
+    private String parseDelimiter(String input) {
+        if (input.contains("["))
+            return input.substring(1, input.length() - 1);
+        else
+            return input;
     }
 
     private Integer sum(List<Integer> numbersList) {
@@ -44,23 +55,31 @@ public class StringCalculator2Impl implements StringCalculator2 {
 
         if (numbers.isBlank())
             numberList = new ArrayList<>(DEFAULT_VALUE);
-        else {
+        else
             numberList = getNumberList(numbers, delimiterRegex);
-        }
 
-        List<Integer> negatives = getNegativeNumbers(numberList);
-        if (!negatives.isEmpty())
-            throw new NegativeNumberException("negatives not allowed: " + negatives);
+        precessNegativeNumbers(numberList);
 
-        numberList = ignoreGreaterThanThousand(numberList);
+        numberList = ignoreNumbersGreaterThanThousand(numberList);
         return numberList;
     }
 
-    private List<Integer> getNumberList(String numbers, String delimiterRegex) {
-        return Arrays.stream(numbers.split(delimiterRegex)).map(Integer::valueOf).collect(Collectors.toList());
+    private void precessNegativeNumbers(List<Integer> numberList) {
+        List<Integer> negatives = getNegativeNumbers(numberList);
+        if (!negatives.isEmpty())
+            throw new NegativeNumberException("negatives not allowed: " + negatives);
     }
 
-    private List<Integer> ignoreGreaterThanThousand(List<Integer> numberList) {
+    private List<Integer> getNumberList(String numbers, String delimiterRegex) {
+        String[] numbersArray = splitNumbers(numbers, delimiterRegex);
+        return Arrays.stream(numbersArray).map(Integer::valueOf).collect(Collectors.toList());
+    }
+
+    private String[] splitNumbers(String numbers, String delimiterRegex) {
+        return numbers.split(delimiterRegex);
+    }
+
+    private List<Integer> ignoreNumbersGreaterThanThousand(List<Integer> numberList) {
         return numberList.stream().filter(n -> n <= 1000).collect(Collectors.toList());
     }
 

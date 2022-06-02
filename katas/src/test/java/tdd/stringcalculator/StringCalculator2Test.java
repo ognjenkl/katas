@@ -19,27 +19,27 @@ class StringCalculator2Test {
     }
 
     @Test
-    void add_shouldReturnDefaultValue_NoParameters() {
+    void add_shouldReturnDefaultValue_noParameters() {
         assertEquals(StringCalculator2.DEFAULT_VALUE, stringCalculator.add(""));
     }
 
     @Test
-    void add_shouldReturnDefaultValue_EmptyParameters() {
+    void add_shouldReturnDefaultValue_emptyParameters() {
         assertEquals(StringCalculator2.DEFAULT_VALUE, stringCalculator.add("    "));
     }
 
     @Test
-    void add_shouldReturnOne_OneParameter() {
+    void add_shouldReturnOne_oneParameter() {
         assertEquals(1, stringCalculator.add("1"));
     }
 
     @Test
-    void add_shouldReturnTwo_OneParameter() {
+    void add_shouldReturnTwo_oneParameter() {
         assertEquals(2, stringCalculator.add("2"));
     }
 
     @Test
-    void add_shouldCalculate3_ForOneAndTwoAsParameters() {
+    void add_shouldCalculate3_forOneAndTwoAsParameters() {
         assertEquals(3, stringCalculator.add("1,2"));
     }
 
@@ -53,37 +53,37 @@ class StringCalculator2Test {
     }
 
     @Test
-    void add_OneTwoAndThreeParameters_ReturnSix() {
+    void add_oneTwoAndThreeParameters_returnSix() {
         assertEquals(6, stringCalculator.add("1,2,3"));
     }
 
     @Test
-    void add_numberOfParametersFour_ReturnTen() {
+    void add_numberOfParametersFour_returnTen() {
         assertEquals(10, stringCalculator.add("1,2,3,4"));
     }
 
     @Test
-    void add_numberOfParamsThreeWithNewLines_ReturnSix() {
+    void add_numberOfParamsThreeWithNewLines_returnSix() {
         assertEquals(6, stringCalculator.add("1,2\n3"));
     }
 
     @Test
-    void add_numberOfParamsFourWithNewLineAsDelimiter_ReturnEleven() {
+    void add_numberOfParamsFourWithNewLineAsDelimiter_returnEleven() {
         assertEquals(11, stringCalculator.add("1,2\n3,5"));
     }
 
     @Test
-    void add_delimiterDefinedInString_Return3() {
+    void add_delimiterDefinedInString_return3() {
         assertEquals(3, stringCalculator.add("//;\n1;2"));
     }
 
     @Test
-    void add_delimiterDefinedInString_Return6() {
+    void add_delimiterDefinedInString_return6() {
         assertEquals(6, stringCalculator.add("//;\n1;2;3"));
     }
 
     @Test
-    void add_ifThereIsNegativNumber_ThrowExceptionWithThatNumberInMessage() {
+    void add_ifThereIsNegativNumber_throwExceptionWithThatNumberInMessage() {
         NegativeNumberException negativeNumberException = assertThrows(
                 NegativeNumberException.class, () -> stringCalculator.add(("-1")));
         assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
@@ -92,7 +92,7 @@ class StringCalculator2Test {
     }
 
     @Test
-    void add_ifThereIsTwoNegativNumbers_ThrowExceptionWithThatNumbersInMessage() {
+    void add_ifThereIsTwoNegativNumbers_throwExceptionWithThatNumbersInMessage() {
         NegativeNumberException negativeNumberException = assertThrows(
                 NegativeNumberException.class, () -> stringCalculator.add(("-1,3,-2")));
         assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
@@ -100,7 +100,7 @@ class StringCalculator2Test {
     }
 
     @Test
-    void add_ifThereIsTwoNegativNumbers_ThrowExceptionWithThatNumbersInMessage2() {
+    void add_ifThereIsTwoNegativNumbers_throwExceptionWithThatNumbersInMessage2() {
         NegativeNumberException negativeNumberException = assertThrows(
                 NegativeNumberException.class, () -> stringCalculator.add(("-1\n3,-2")));
         assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
@@ -108,7 +108,7 @@ class StringCalculator2Test {
     }
 
     @Test
-    void add_ifThereIsTwoNegativNumbers_ThrowExceptionWithThatNumbersInMessage3() {
+    void add_ifThereIsTwoNegativNumbers_throwExceptionWithThatNumbersInMessage3() {
         NegativeNumberException negativeNumberException = assertThrows(
                 NegativeNumberException.class, () -> stringCalculator.add(("//;\n-1;3;-2")));
         assertTrue(negativeNumberException.getMessage().startsWith("negatives not allowed"));
@@ -116,14 +116,14 @@ class StringCalculator2Test {
     }
 
     @Test
-    void getCalledCount_calculatesHowManyTimesAddWasCalled_Return1() {
+    void getCalledCount_calculatesHowManyTimesAddWasCalled_return1() {
         stringCalculator.add("1,2");
         Integer count = stringCalculator.getCalledCount();
         assertEquals(1, count);
     }
 
     @Test
-    void getCalledCount_callAdd2_Return2() {
+    void getCalledCount_callAdd2_return2() {
         stringCalculator.add("1,2");
         stringCalculator.add("//;\n1;3;2");
         Integer count = stringCalculator.getCalledCount();
@@ -131,14 +131,20 @@ class StringCalculator2Test {
     }
 
     @Test
-    void add_ignoreNumbersGT1000_Return2() {
+    void add_ignoreNumbersGT1000_return2() {
         Integer sum = stringCalculator.add("2,1001");
         assertEquals(2, sum);
     }
 
     @Test
-    void add_ignoreNumbersGT1000_Return1001() {
+    void add_ignoreNumbersGT1000_return1001() {
         Integer sum = stringCalculator.add("2,1001\n999");
         assertEquals(1001, sum);
+    }
+
+    @Test
+    void add_delimitersOfAnyLength_return6() {
+        Integer sum = stringCalculator.add("//[***]\n1***2***3");
+        assertEquals(6, sum);
     }
 }
