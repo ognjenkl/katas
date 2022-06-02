@@ -147,4 +147,10 @@ class StringCalculator2Test {
         Integer sum = stringCalculator.add("//[***]\n1***2***3");
         assertEquals(6, sum);
     }
+
+    @Test
+    void add_multipleDelimitersOfAnyLength_return6() {
+        Integer sum = stringCalculator.add("//[*][%]\n1*2%3");
+        assertEquals(6, sum);
+    }
 }

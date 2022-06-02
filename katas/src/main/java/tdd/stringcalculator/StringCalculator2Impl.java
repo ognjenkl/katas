@@ -3,6 +3,7 @@ package tdd.stringcalculator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -23,24 +24,39 @@ public class StringCalculator2Impl implements StringCalculator2 {
     }
 
     private List<Integer> parse(String numbers) {
-        String commaDelimiter = ",";
         String newLineDelimiter = "\n";
-        String delimiterRegex = commaDelimiter + "|" + newLineDelimiter;
+        List<String> delimiters = List.of(",", newLineDelimiter);
+        String delimiterRegex = generateDelimiterRegex(delimiters);
 
         if (numbers.startsWith("//")) {
             String[] numbersArray = splitNumbers(numbers.substring(2), newLineDelimiter);
-            delimiterRegex = Pattern.quote(parseDelimiter(numbersArray[0]));
+            delimiterRegex = generateDelimiterRegex(parseDelimiter(numbersArray[0]));
             numbers = numbersArray[1];
         }
 
         return parseNumbers(numbers, delimiterRegex);
     }
 
-    private String parseDelimiter(String input) {
+    private String generateDelimiterRegex(List<String> delimiters) {
+        return delimiters.stream().map(Pattern::quote).collect(Collectors.joining("|"));
+    }
+
+    private List<String> parseDelimiter(String input) {
+        List<String> delimiters = List.of(input);
         if (input.contains("["))
-            return input.substring(1, input.length() - 1);
-        else
-            return input;
+            delimiters = getFromSquareBrackets(input);
+        return delimiters;
+    }
+
+    private List<String> getFromSquareBrackets(String input) {
+        List<String> delimiters = new ArrayList<>();
+        Pattern p = Pattern.compile("\\[(.*?)]");
+        Matcher m = p.matcher(input);
+
+        while (m.find())
+            delimiters.add(m.group(1));
+
+        return delimiters;
     }
 
     private Integer sum(List<Integer> numbersList) {
