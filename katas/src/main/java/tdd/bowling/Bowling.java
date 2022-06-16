@@ -5,20 +5,32 @@ public class Bowling {
     private Integer score;
     private Frame[] frames = new Frame[10];
 
+    private int rollCounter;
+
     public Bowling() {
         score = 0;
         frames[0] = new Frame();
+        rollCounter = 0;
     }
 
     public void roll(Integer pins) {
+        rollCounter++;
         pinInputValidation(pins);
         if (frames[0].roll2 > 0) {
-            frames[1] = new Frame();
+            if (frames[1] == null)
+                frames[1] = new Frame();
             frames[1].roll1 = pins;
         } else if (frames[0].roll1 > 0)
-            frames[0].roll2 = pins;
+            if (Integer.valueOf(10).equals(frames[0].roll1)) {
+                frames[0].roll2 = 0;
+                if (frames[1] == null)
+                    frames[1] = new Frame();
+                frames[1].roll1 = pins;
+            } else
+                frames[0].roll2 = pins;
         else
             frames[0].roll1 = pins;
+        System.out.println(rollCounter);
     }
 
     private void pinInputValidation(Integer pins) {
@@ -56,15 +68,28 @@ public class Bowling {
         }
 
         Boolean isSpare() {
-            return roll1 + roll2 == 10;
+            return Integer.valueOf(10).equals(roll1 + roll2);
         }
 
-        public Integer bonus(Frame nextFrame) {
+        public Integer spareBonus(Frame nextFrame) {
+            return nextFrame != null ? nextFrame.roll1 : 0;
+        }
+
+        public Integer strikeBonus(Frame nextFrame) {
             return nextFrame != null ? nextFrame.score() : 0;
         }
 
         public Integer scoreTotal(Frame nextFrame) {
-            return score() + bonus(nextFrame);
+            if (isSpare())
+                return score() + spareBonus(nextFrame);
+            else if (isStrike())
+                return score() + strikeBonus(nextFrame);
+            else
+                return score();
+        }
+
+        public Boolean isStrike() {
+            return Integer.valueOf(10).equals(roll1);
         }
     }
 }
