@@ -3,6 +3,8 @@ package tdd.bowling;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -124,72 +126,95 @@ class BowlingTest {
         assertThrows(IrregularInputException.class, () -> bowling.roll(11));
     }
 
-    @Test
-    void score_twoRolls5And4Pins_scoreTest() {
-        bowling.roll(5);
-        bowling.roll(4);
+    @ParameterizedTest
+    @CsvSource({
+            "5,4,9",
+            "5,5,10",
+            "9,1,10",
+            "10,1,11",
+            "10,9,19",
+            "10,10,20",
+            "0,2,2"})
+    void score_twoRolls_score(Integer i1, Integer i2, Integer s) {
+        bowling.roll(i1);
+        bowling.roll(i2);
         Integer score = bowling.score();
 
-        assertEquals(9, score);
+        assertEquals(s, score);
     }
 
-    @Test
-    void score_twoRolls5And5Pins_score10Test() {
-        bowling.roll(5);
-        bowling.roll(5);
-        Integer score = bowling.score();
-
-        assertEquals(10, score);
-    }
-
-    @Test
-    void score_twoRolls9And1Pins_score10Test() {
-        bowling.roll(9);
-        bowling.roll(1);
-        Integer score = bowling.score();
-
-        assertEquals(10, score);
-    }
-
-    @Test
-    void score_twoRolls10And1Pins_score11Test() {
-        bowling.roll(10);
-        bowling.roll(1);
-        Integer score = bowling.score();
-
-        assertEquals(11, score);
-    }
-
-    @Test
-    void score_twoRolls10And9Pins_score19Test() {
-        bowling.roll(10);
-        bowling.roll(9);
-        Integer score = bowling.score();
-
-        assertEquals(19, score);
-    }
-
-    @Test
-    void score_twoRolls10And10Pins_score20Test() {
-        bowling.roll(10);
-        bowling.roll(10);
-        Integer score = bowling.score();
-
-        assertEquals(20, score);
-    }
-
-    @Test
-    void score_twoRolls1And10Pins_throwIrregularFrameInputExceptionTest() {
-        bowling.roll(1);
-        bowling.roll(10);
+    @ParameterizedTest
+    @CsvSource({"9,2", "1,10"})
+    void score_twoRolls_throwIrregularFrameInputExceptionTest(Integer i1, Integer i2) {
+        bowling.roll(i1);
+        bowling.roll(i2);
         assertThrows(IrregularFrameInputException.class, () -> bowling.score());
     }
 
-    @Test
-    void score_twoRolls9And2Pins_throwIrregularFrameInputExceptionTest() {
-        bowling.roll(9);
-        bowling.roll(2);
-        assertThrows(IrregularFrameInputException.class, () -> bowling.score());
+    @ParameterizedTest
+    @CsvSource({
+            "0,0,0,0",
+            "0,0,1,1",
+            "0,1,2,3",
+            "1,2,3,6",
+            "1,0,2,3",
+            "1,2,0,3",
+            "2,3,4,9",
+            "4,5,6,15",
+            "4,5,10,19"
+    })
+    void score_threeRolls_scoreTest(Integer i1, Integer i2, Integer i3, Integer s) {
+        bowling.roll(i1);
+        bowling.roll(i2);
+        bowling.roll(i3);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
     }
 
+    @Test
+    void isSpare_frameRolls5And5Spare_true() {
+        Bowling.Frame frame = bowling.new Frame();
+        frame.roll1 = 5;
+        frame.roll2 = 5;
+        assertTrue(frame.isSpare());
+    }
+
+    @Test
+    void isSpare_frameRollsSpare_false() {
+        Bowling.Frame frame = bowling.new Frame();
+        frame.roll1 = 5;
+        frame.roll2 = 4;
+        assertFalse(frame.isSpare());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1,2,3",
+            "4,5,9",
+            "5,5,10",
+            "10, 5, 15",
+            "10, 10, 20"})
+    void bonus_setNextFrameToCalculateBonus_bonusCalculated(Integer r1, Integer r2, Integer bonus) {
+        Bowling.Frame frame = bowling.new Frame();
+        Bowling.Frame nextFrame = bowling.new Frame();
+        nextFrame.roll1 = r1;
+        nextFrame.roll2 = r2;
+
+        assertEquals(bonus, frame.bonus(nextFrame));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "4,6,3,16"
+    })
+    void score_threeRollsSpare_scoreTest(Integer i1, Integer i2, Integer i3, Integer s) {
+        bowling.roll(i1);
+        bowling.roll(i2);
+        bowling.roll(i3);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
+    }
 }
