@@ -128,7 +128,7 @@ class BowlingTest {
         nextFrame.roll1 = r1;
         nextFrame.roll2 = r2;
 
-        assertEquals(bonus, frame.strikeBonus(nextFrame));
+        assertEquals(bonus, frame.strikeBonus(nextFrame, null));
 
     }
 

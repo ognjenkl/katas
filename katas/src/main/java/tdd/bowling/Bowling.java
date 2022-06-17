@@ -47,7 +47,7 @@ public class Bowling {
 
         for (int i = 0; i < 10; i++)
             if (frames[i] != null)
-                score += frames[i].scoreTotal(frames[i + 1]);
+                score += frames[i].scoreTotal(frames[i + 1], frames[i + 2]);
 
         return score;
     }
@@ -85,15 +85,19 @@ public class Bowling {
             return nextFrame != null ? nextFrame.roll1 : 0;
         }
 
-        public Integer strikeBonus(Frame nextFrame) {
-            return nextFrame != null ? nextFrame.score() : 0;
+        public Integer strikeBonus(Frame nextFrame, Frame secondNextFrame) {
+            Integer retVal = nextFrame != null
+                    ? nextFrame.score() : 0;
+            if (nextFrame != null && nextFrame.isStrike() && secondNextFrame != null)
+                retVal = nextFrame.scoreTotal(secondNextFrame, null);
+            return retVal;
         }
 
-        public Integer scoreTotal(Frame nextFrame) {
+        public Integer scoreTotal(Frame nextFrame, Frame secondNextFrame) {
             if (isSpare())
                 return score() + spareBonus(nextFrame);
             else if (isStrike())
-                return score() + strikeBonus(nextFrame);
+                return score() + strikeBonus(nextFrame, secondNextFrame);
             else
                 return score();
         }

@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 public class BowlingThreeRollsTest {
@@ -68,4 +69,24 @@ public class BowlingThreeRollsTest {
 
         assertEquals(s, score);
     }
+
+    @ParameterizedTest
+    @CsvSource({"10,5,6"})
+    void score_threeRollsStrike_throwsIrregularFrameInputException(Integer i1, Integer i2, Integer i3) {
+        bowling.roll(i1);
+        bowling.roll(i2);
+        assertThrows(IrregularFrameInputException.class, () -> bowling.roll(i3));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"10,10,10,60"})
+    void score_threeRollsThreeStrikes_scoreTest(Integer i1, Integer i2, Integer i3, Integer s) {
+        bowling.roll(i1);
+        bowling.roll(i2);
+        bowling.roll(i3);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
+    }
+
 }
