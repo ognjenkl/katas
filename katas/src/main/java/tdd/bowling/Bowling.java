@@ -10,27 +10,31 @@ public class Bowling {
     public Bowling() {
         score = 0;
         frames[0] = new Frame();
-        rollCounter = 0;
+        rollCounter = 1;
     }
 
     public void roll(Integer pins) {
-        rollCounter++;
         pinInputValidation(pins);
-        if (frames[0].roll2 > 0) {
-            if (frames[1] == null)
-                frames[1] = new Frame();
-            frames[1].roll1 = pins;
-        } else if (frames[0].roll1 > 0)
-            if (Integer.valueOf(10).equals(frames[0].roll1)) {
-                frames[0].roll2 = 0;
-                if (frames[1] == null)
-                    frames[1] = new Frame();
-                frames[1].roll1 = pins;
-            } else
-                frames[0].roll2 = pins;
-        else
-            frames[0].roll1 = pins;
+        for (int i = 0; i < 10; i++) {
+            if (frames[i] == null)
+                frames[i] = new Frame();
+            else if (frames[i].rollCount == 2)
+                continue;
+            if (frames[i].rollCount == 0) {
+                frames[i].roll1 = pins;
+                frames[i].rollCount++;
+                if (frames[i].roll1 == 10)
+                    frames[i].rollCount++;
+            } else if (frames[i].rollCount == 1) {
+                frames[i].roll2 = pins;
+                frames[i].rollCount++;
+                if (frames[i].roll1 + frames[i].roll2 > 10)
+                    throw new IrregularFrameInputException();
+            }
+            break;
+        }
         System.out.println(rollCounter);
+        rollCounter++;
     }
 
     private void pinInputValidation(Integer pins) {
@@ -57,10 +61,12 @@ public class Bowling {
     class Frame {
         Integer roll1;
         Integer roll2;
+        Integer rollCount;
 
         Frame() {
             roll1 = 0;
             roll2 = 0;
+            rollCount = 0;
         }
 
         Integer score() {
@@ -68,7 +74,11 @@ public class Bowling {
         }
 
         Boolean isSpare() {
-            return Integer.valueOf(10).equals(roll1 + roll2);
+            return roll1 != 10 && Integer.valueOf(10).equals(roll1 + roll2);
+        }
+
+        public Boolean isStrike() {
+            return Integer.valueOf(10).equals(roll1);
         }
 
         public Integer spareBonus(Frame nextFrame) {
@@ -86,10 +96,6 @@ public class Bowling {
                 return score() + strikeBonus(nextFrame);
             else
                 return score();
-        }
-
-        public Boolean isStrike() {
-            return Integer.valueOf(10).equals(roll1);
         }
     }
 }

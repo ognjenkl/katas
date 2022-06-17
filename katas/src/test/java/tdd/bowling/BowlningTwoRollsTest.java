@@ -62,20 +62,22 @@ public class BowlningTwoRollsTest {
             "5,5,10",
             "9,1,10",
             "0,2,2"})
-    void score_twoRolls_score(Integer i1, Integer i2, Integer s) {
-        bowling.roll(i1);
-        bowling.roll(i2);
+    void score_twoRolls_score(Integer r1, Integer r2, Integer s) {
+        bowling.roll(r1);
+        bowling.roll(r2);
         Integer score = bowling.score();
 
         assertEquals(s, score);
     }
 
     @ParameterizedTest
-    @CsvSource({"9,2", "1,10"})
-    void score_twoRolls_throwIrregularFrameInputExceptionTest(Integer i1, Integer i2) {
-        bowling.roll(i1);
-        bowling.roll(i2);
-        assertThrows(IrregularFrameInputException.class, () -> bowling.score());
+    @CsvSource({
+            "9,2",
+            "1,10"})
+    void score_twoRolls_throwIrregularFrameInputExceptionTest(Integer r1, Integer r2) {
+        bowling.roll(r1);
+//        bowling.roll(r2);
+        assertThrows(IrregularFrameInputException.class, () -> bowling.roll(r2));
     }
 
     @ParameterizedTest

@@ -53,4 +53,19 @@ public class BowlingThreeRollsTest {
 
         assertEquals(s, score);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "10,1,2,16",
+            "10,4,5,28",
+            "10,5,5,30"
+    })
+    void score_threeRollsStrike_scoreTest(Integer i1, Integer i2, Integer i3, Integer s) {
+        bowling.roll(i1);
+        bowling.roll(i2);
+        bowling.roll(i3);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
+    }
 }
