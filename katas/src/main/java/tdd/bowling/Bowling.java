@@ -1,19 +1,29 @@
 package tdd.bowling;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Bowling {
 
     private Integer score;
-    private Frame[] frames = new Frame[10];
+    private Frame[] frames;
+    private Map<Integer, Integer> rollMap;
 
     private int rollCounter;
 
     public Bowling() {
         score = 0;
-        rollCounter = 1;
+        rollCounter = 0;
+        frames = new Frame[10];
+        rollMap = new HashMap<>();
     }
 
     public void roll(Integer pins) {
         pinInputValidation(pins);
+        System.out.println(rollCounter);
+        rollCounter++;
+        rollMap.put(rollCounter, pins);
+
         for (int i = 1; i <= 10; i++) {
             if (frames[i] == null)
                 frames[i] = new Frame(i);
@@ -32,8 +42,6 @@ public class Bowling {
             }
             break;
         }
-        System.out.println(rollCounter);
-        rollCounter++;
     }
 
     private void pinInputValidation(Integer pins) {
@@ -47,6 +55,14 @@ public class Bowling {
                 score += frames[i].scoreTotal(frames[i + 1], frames[i + 2]);
 
         return score;
+    }
+
+    public Integer getRollCounter() {
+        return rollCounter;
+    }
+
+    public Integer getPinsByRoll(Integer rollIndex) {
+        return rollMap.get(rollIndex);
     }
 
     class Frame {

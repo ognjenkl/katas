@@ -153,4 +153,26 @@ class BowlingTest {
         Bowling.Frame frame = bowling.new Frame(1);
         assertEquals(1, frame.getFrameIndex());
     }
+
+    @Test
+    void roll_saveRollCount_rollCount1() {
+        bowling.roll(1);
+        assertEquals(1, bowling.getRollCounter());
+    }
+
+    @Test
+    void roll_saveRollCounts_rollCount3() {
+        bowling.roll(1);
+        bowling.roll(1);
+        bowling.roll(1);
+        assertEquals(3, bowling.getRollCounter());
+    }
+
+    @Test
+    void getPinsByRoll_provideRollIndex2_return4Pins() {
+        bowling.roll(2);
+        bowling.roll(4);
+        bowling.roll(6);
+        assertEquals(4, bowling.getPinsByRoll(2));
+    }
 }
