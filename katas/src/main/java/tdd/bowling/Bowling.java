@@ -1,36 +1,30 @@
 package tdd.bowling;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Bowling {
 
     private final Integer TEN = 10;
 
     private Integer score;
     private Frame[] frames;
-    private Map<Integer, Integer> rollMap;
 
     private int rollCounter;
 
     public Bowling() {
         score = 0;
         rollCounter = 0;
-        frames = new Frame[TEN];
-        rollMap = new HashMap<>();
+        frames = new Frame[TEN + 1];
     }
 
     public void roll(Integer pins) {
         pinInputValidation(pins);
-        System.out.println(rollCounter);
         rollCounter++;
-        rollMap.put(rollCounter, pins);
 
         for (int i = 1; i <= TEN; i++) {
             if (frames[i] == null)
                 frames[i] = new Frame(i);
             else if (frames[i].rollCount == 2)
                 continue;
+
             if (frames[i].rollCount == 0) {
                 frames[i].setRoll1(pins);
                 frames[i].rollCount++;
@@ -52,19 +46,14 @@ public class Bowling {
     }
 
     public Integer score() {
-        for (int i = 0; i < TEN; i++)
+        for (int i = 1; i <= TEN; i++)
             if (frames[i] != null)
-                score += frames[i].scoreTotal(frames[i + 1], frames[i + 2]);
-
+                score += frames[i].scoreTotal(i + 1);
         return score;
     }
 
     public Integer getRollCounter() {
         return rollCounter;
-    }
-
-    public Integer getPinsByRoll(Integer rollIndex) {
-        return rollMap.get(rollIndex);
     }
 
     class Frame {
@@ -92,29 +81,28 @@ public class Bowling {
             return TEN.equals(roll1);
         }
 
-        public Integer spareBonus(Frame nextFrame) {
-            return nextFrame != null ? nextFrame.getRoll1() : 0;
+        public Integer spareBonus(Integer nextFrameIndex) {
+            return getRoll1(nextFrameIndex);
         }
 
-        public Integer strikeBonus(Frame nextFrame, Frame secondNextFrame) {
+        public Integer strikeBonus(Integer nextFrameIndex) {
             Integer retVal;
-            if (nextFrame != null)
-                if (nextFrame.isStrike())
-                    retVal = nextFrame.score() + (secondNextFrame != null
-                            ? secondNextFrame.getRoll1()
-                            : 0);
-                else
-                    retVal = nextFrame.score();
+            if (nextFrameIndex <= TEN)
+                if (frames[nextFrameIndex].isStrike()) {
+                    retVal = frames[nextFrameIndex].score();
+                    retVal += getRoll1(nextFrameIndex + 1);
+                } else
+                    retVal = frames[nextFrameIndex].score();
             else
                 retVal = 0;
             return retVal;
         }
 
-        public Integer scoreTotal(Frame nextFrame, Frame secondNextFrame) {
+        public Integer scoreTotal(Integer nextFrameIndex) {
             if (isSpare())
-                return score() + spareBonus(nextFrame);
+                return score() + spareBonus(nextFrameIndex);
             else if (isStrike())
-                return score() + strikeBonus(nextFrame, secondNextFrame);
+                return score() + strikeBonus(nextFrameIndex);
             else
                 return score();
         }
@@ -125,6 +113,10 @@ public class Bowling {
 
         public Integer getRoll1() {
             return roll1;
+        }
+
+        private int getRoll1(Integer nextFrameIndex) {
+            return nextFrameIndex <= TEN ? frames[nextFrameIndex].getRoll1() : 0;
         }
 
         public void setRoll1(Integer roll1) {

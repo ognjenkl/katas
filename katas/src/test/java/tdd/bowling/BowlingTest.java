@@ -128,7 +128,7 @@ class BowlingTest {
         nextFrame.setRoll1(r1);
         nextFrame.setRoll2(r2);
 
-        assertEquals(bonus, frame.strikeBonus(nextFrame, null));
+        assertEquals(bonus, frame.strikeBonus(1));
 
     }
 
@@ -145,7 +145,7 @@ class BowlingTest {
         nextFrame.setRoll1(r1);
         nextFrame.setRoll2(r2);
 
-        assertEquals(bonus, frame.spareBonus(nextFrame));
+        assertEquals(bonus, frame.spareBonus(2));
     }
 
     @Test
@@ -166,13 +166,5 @@ class BowlingTest {
         bowling.roll(1);
         bowling.roll(1);
         assertEquals(3, bowling.getRollCounter());
-    }
-
-    @Test
-    void getPinsByRoll_provideRollIndex2_return4Pins() {
-        bowling.roll(2);
-        bowling.roll(4);
-        bowling.roll(6);
-        assertEquals(4, bowling.getPinsByRoll(2));
     }
 }
