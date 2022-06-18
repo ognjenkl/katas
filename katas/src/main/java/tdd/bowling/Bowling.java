@@ -32,14 +32,14 @@ public class Bowling {
             else if (frames[i].rollCount == 2)
                 continue;
             if (frames[i].rollCount == 0) {
-                frames[i].roll1 = pins;
+                frames[i].setRoll1(pins);
                 frames[i].rollCount++;
-                if (TEN.equals(frames[i].roll1))
+                if (TEN.equals(frames[i].getRoll1()))
                     frames[i].rollCount++;
             } else if (frames[i].rollCount == 1) {
-                frames[i].roll2 = pins;
+                frames[i].setRoll2(pins);
                 frames[i].rollCount++;
-                if (TEN.compareTo(frames[i].roll1 + frames[i].roll2) < 0)
+                if (TEN.compareTo(frames[i].getRoll1() + frames[i].getRoll2()) < 0)
                     throw new IrregularFrameInputException();
             }
             break;
@@ -69,9 +69,11 @@ public class Bowling {
 
     class Frame {
         private final Integer frameIndex;
-        Integer roll1;
-        Integer roll2;
+        private Integer roll1;
+        private Integer roll2;
         Integer rollCount;
+        Boolean spare;
+        Boolean strike;
 
         Frame(Integer frameIndex) {
             roll1 = 0;
@@ -93,7 +95,7 @@ public class Bowling {
         }
 
         public Integer spareBonus(Frame nextFrame) {
-            return nextFrame != null ? nextFrame.roll1 : 0;
+            return nextFrame != null ? nextFrame.getRoll1() : 0;
         }
 
         public Integer strikeBonus(Frame nextFrame, Frame secondNextFrame) {
@@ -115,6 +117,22 @@ public class Bowling {
 
         public Integer getFrameIndex() {
             return frameIndex;
+        }
+
+        public Integer getRoll1() {
+            return roll1;
+        }
+
+        public void setRoll1(Integer roll1) {
+            this.roll1 = roll1;
+        }
+
+        public Integer getRoll2() {
+            return roll2;
+        }
+
+        public void setRoll2(Integer roll2) {
+            this.roll2 = roll2;
         }
     }
 }

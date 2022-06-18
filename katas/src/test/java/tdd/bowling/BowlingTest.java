@@ -96,22 +96,22 @@ class BowlingTest {
     @Test
     void isSpare_frameRolls5And5Spare_true() {
         Bowling.Frame frame = bowling.new Frame(1);
-        frame.roll1 = 5;
-        frame.roll2 = 5;
+        frame.setRoll1(5);
+        frame.setRoll2(5);
         assertTrue(frame.isSpare());
     }
 
     @Test
     void isStrike_frameRolls5And5Strike_true() {
         Bowling.Frame frame = bowling.new Frame(1);
-        frame.roll1 = 10;
+        frame.setRoll1(10);
         assertTrue(frame.isStrike());
     }
 
     @Test
     void isStrike_frameRollsStrike_false() {
         Bowling.Frame frame = bowling.new Frame(1);
-        frame.roll1 = 5;
+        frame.setRoll1(5);
         assertFalse(frame.isStrike());
     }
 
@@ -125,8 +125,8 @@ class BowlingTest {
     void strikeBonus_setNextFrameToCalculateStrikeBonus_strikeBonusCalculated(Integer r1, Integer r2, Integer bonus) {
         Bowling.Frame frame = bowling.new Frame(1);
         Bowling.Frame nextFrame = bowling.new Frame(2);
-        nextFrame.roll1 = r1;
-        nextFrame.roll2 = r2;
+        nextFrame.setRoll1(r1);
+        nextFrame.setRoll2(r2);
 
         assertEquals(bonus, frame.strikeBonus(nextFrame, null));
 
@@ -142,8 +142,8 @@ class BowlingTest {
     void spareBonus_setNextFrameToCalculateSpareBonus_spareBonusCalculated(Integer r1, Integer r2, Integer bonus) {
         Bowling.Frame frame = bowling.new Frame(1);
         Bowling.Frame nextFrame = bowling.new Frame(2);
-        nextFrame.roll1 = r1;
-        nextFrame.roll2 = r2;
+        nextFrame.setRoll1(r1);
+        nextFrame.setRoll2(r2);
 
         assertEquals(bonus, frame.spareBonus(nextFrame));
     }
