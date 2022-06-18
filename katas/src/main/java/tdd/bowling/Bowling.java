@@ -43,20 +43,12 @@ public class Bowling {
     }
 
     public Integer score() {
-        frameInputValidation();
-
         for (int i = 0; i < 10; i++)
             if (frames[i] != null)
                 score += frames[i].scoreTotal(frames[i + 1], frames[i + 2]);
 
         return score;
     }
-
-    private void frameInputValidation() {
-        if (frames[0].score() > 10 && frames[0].roll1 < 10)
-            throw new IrregularFrameInputException();
-    }
-
 
     class Frame {
         Integer roll1;
