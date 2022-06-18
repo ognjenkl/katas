@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class Bowling {
 
+    private final Integer TEN = 10;
+
     private Integer score;
     private Frame[] frames;
     private Map<Integer, Integer> rollMap;
@@ -14,7 +16,7 @@ public class Bowling {
     public Bowling() {
         score = 0;
         rollCounter = 0;
-        frames = new Frame[10];
+        frames = new Frame[TEN];
         rollMap = new HashMap<>();
     }
 
@@ -24,7 +26,7 @@ public class Bowling {
         rollCounter++;
         rollMap.put(rollCounter, pins);
 
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= TEN; i++) {
             if (frames[i] == null)
                 frames[i] = new Frame(i);
             else if (frames[i].rollCount == 2)
@@ -32,12 +34,12 @@ public class Bowling {
             if (frames[i].rollCount == 0) {
                 frames[i].roll1 = pins;
                 frames[i].rollCount++;
-                if (frames[i].roll1 == 10)
+                if (TEN.equals(frames[i].roll1))
                     frames[i].rollCount++;
             } else if (frames[i].rollCount == 1) {
                 frames[i].roll2 = pins;
                 frames[i].rollCount++;
-                if (frames[i].roll1 + frames[i].roll2 > 10)
+                if (TEN.compareTo(frames[i].roll1 + frames[i].roll2) < 0)
                     throw new IrregularFrameInputException();
             }
             break;
@@ -45,12 +47,12 @@ public class Bowling {
     }
 
     private void pinInputValidation(Integer pins) {
-        if (pins == null || pins < 0 || pins > 10)
+        if (pins == null || pins < 0 || TEN.compareTo(pins) < 0)
             throw new IrregularInputException();
     }
 
     public Integer score() {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < TEN; i++)
             if (frames[i] != null)
                 score += frames[i].scoreTotal(frames[i + 1], frames[i + 2]);
 
@@ -83,11 +85,11 @@ public class Bowling {
         }
 
         Boolean isSpare() {
-            return roll1 != 10 && Integer.valueOf(10).equals(roll1 + roll2);
+            return !TEN.equals(roll1) && TEN.equals(roll1 + roll2);
         }
 
         public Boolean isStrike() {
-            return Integer.valueOf(10).equals(roll1);
+            return TEN.equals(roll1);
         }
 
         public Integer spareBonus(Frame nextFrame) {
