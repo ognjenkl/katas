@@ -72,8 +72,6 @@ public class Bowling {
         private Integer roll1;
         private Integer roll2;
         Integer rollCount;
-        Boolean spare;
-        Boolean strike;
 
         Frame(Integer frameIndex) {
             roll1 = 0;
@@ -99,10 +97,16 @@ public class Bowling {
         }
 
         public Integer strikeBonus(Frame nextFrame, Frame secondNextFrame) {
-            Integer retVal = nextFrame != null
-                    ? nextFrame.score() : 0;
-            if (nextFrame != null && nextFrame.isStrike() && secondNextFrame != null)
-                retVal = nextFrame.scoreTotal(secondNextFrame, null);
+            Integer retVal;
+            if (nextFrame != null)
+                if (nextFrame.isStrike())
+                    retVal = nextFrame.score() + (secondNextFrame != null
+                            ? secondNextFrame.getRoll1()
+                            : 0);
+                else
+                    retVal = nextFrame.score();
+            else
+                retVal = 0;
             return retVal;
         }
 
