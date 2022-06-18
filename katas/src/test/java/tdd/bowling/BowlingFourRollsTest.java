@@ -28,7 +28,12 @@ public class BowlingFourRollsTest {
             "10,1,2,3,19",
             "10,4,5,1,29",
             "10,5,5,1,32",
-            "10,10,1,2,37"
+            "10,10,1,2,37",
+            "10,10,4,5,52",
+            "10,10,5,5,55",
+            "10,10,10,1,63",
+            "10,10,10,9,87",
+            "10,10,10,10,90"
     })
     void score_fourRolls_scoreTest(Integer r1, Integer r2, Integer r3, Integer r4, Integer s) {
         bowling.roll(r1);
