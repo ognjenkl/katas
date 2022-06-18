@@ -95,7 +95,7 @@ class BowlingTest {
 
     @Test
     void isSpare_frameRolls5And5Spare_true() {
-        Bowling.Frame frame = bowling.new Frame();
+        Bowling.Frame frame = bowling.new Frame(1);
         frame.roll1 = 5;
         frame.roll2 = 5;
         assertTrue(frame.isSpare());
@@ -103,14 +103,14 @@ class BowlingTest {
 
     @Test
     void isStrike_frameRolls5And5Strike_true() {
-        Bowling.Frame frame = bowling.new Frame();
+        Bowling.Frame frame = bowling.new Frame(1);
         frame.roll1 = 10;
         assertTrue(frame.isStrike());
     }
 
     @Test
     void isStrike_frameRollsStrike_false() {
-        Bowling.Frame frame = bowling.new Frame();
+        Bowling.Frame frame = bowling.new Frame(1);
         frame.roll1 = 5;
         assertFalse(frame.isStrike());
     }
@@ -123,8 +123,8 @@ class BowlingTest {
             "10, 5, 15",
             "10, 10, 20"})
     void strikeBonus_setNextFrameToCalculateStrikeBonus_strikeBonusCalculated(Integer r1, Integer r2, Integer bonus) {
-        Bowling.Frame frame = bowling.new Frame();
-        Bowling.Frame nextFrame = bowling.new Frame();
+        Bowling.Frame frame = bowling.new Frame(1);
+        Bowling.Frame nextFrame = bowling.new Frame(2);
         nextFrame.roll1 = r1;
         nextFrame.roll2 = r2;
 
@@ -140,12 +140,17 @@ class BowlingTest {
             "10, 5, 10",
             "10, 10, 10"})
     void spareBonus_setNextFrameToCalculateSpareBonus_spareBonusCalculated(Integer r1, Integer r2, Integer bonus) {
-        Bowling.Frame frame = bowling.new Frame();
-        Bowling.Frame nextFrame = bowling.new Frame();
+        Bowling.Frame frame = bowling.new Frame(1);
+        Bowling.Frame nextFrame = bowling.new Frame(2);
         nextFrame.roll1 = r1;
         nextFrame.roll2 = r2;
 
         assertEquals(bonus, frame.spareBonus(nextFrame));
+    }
 
+    @Test
+    void frameIndex_onFrameCreationPass1_index1() {
+        Bowling.Frame frame = bowling.new Frame(1);
+        assertEquals(1, frame.getFrameIndex());
     }
 }

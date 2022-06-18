@@ -9,15 +9,14 @@ public class Bowling {
 
     public Bowling() {
         score = 0;
-        frames[0] = new Frame();
         rollCounter = 1;
     }
 
     public void roll(Integer pins) {
         pinInputValidation(pins);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             if (frames[i] == null)
-                frames[i] = new Frame();
+                frames[i] = new Frame(i);
             else if (frames[i].rollCount == 2)
                 continue;
             if (frames[i].rollCount == 0) {
@@ -51,14 +50,16 @@ public class Bowling {
     }
 
     class Frame {
+        private final Integer frameIndex;
         Integer roll1;
         Integer roll2;
         Integer rollCount;
 
-        Frame() {
+        Frame(Integer frameIndex) {
             roll1 = 0;
             roll2 = 0;
             rollCount = 0;
+            this.frameIndex = frameIndex;
         }
 
         Integer score() {
@@ -92,6 +93,10 @@ public class Bowling {
                 return score() + strikeBonus(nextFrame, secondNextFrame);
             else
                 return score();
+        }
+
+        public Integer getFrameIndex() {
+            return frameIndex;
         }
     }
 }
