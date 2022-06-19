@@ -76,7 +76,6 @@ public class BowlningTwoRollsTest {
             "1,10"})
     void score_twoRolls_throwIrregularFrameInputExceptionTest(Integer r1, Integer r2) {
         bowling.roll(r1);
-//        bowling.roll(r2);
         assertThrows(IrregularFrameInputException.class, () -> bowling.roll(r2));
     }
 

@@ -117,35 +117,35 @@ class BowlingTest {
 
     @ParameterizedTest
     @CsvSource({
-            "1,2,3",
-            "4,5,9",
-            "5,5,10",
-            "10, 5, 15",
-            "10, 10, 20"})
-    void strikeBonus_setNextFrameToCalculateStrikeBonus_strikeBonusCalculated(Integer r1, Integer r2, Integer bonus) {
-        Bowling.Frame frame = bowling.new Frame(1);
-        Bowling.Frame nextFrame = bowling.new Frame(2);
-        nextFrame.setRoll1(r1);
-        nextFrame.setRoll2(r2);
-
-        assertEquals(bonus, frame.strikeBonus(1));
+            "10, 1,2,3",
+            "10, 4,5,9",
+            "10, 5,5,10",
+            "10, 10, 5, 15",
+            "10, 10, 10, 20"})
+    void strikeBonus_setNextFrameToCalculateStrikeBonus_strikeBonusCalculated(Integer r1, Integer r2, Integer r3, Integer bonusExpected) {
+        bowling.roll(r1);
+        bowling.roll(r2);
+        bowling.roll(r3);
+        Integer bonusActual = bowling.new Frame(null).strikeBonus(2);
+        assertEquals(bonusExpected, bonusActual);
 
     }
 
     @ParameterizedTest
     @CsvSource({
-            "1,2,1",
-            "4,5,4",
-            "5,5,5",
-            "10, 5, 10",
-            "10, 10, 10"})
-    void spareBonus_setNextFrameToCalculateSpareBonus_spareBonusCalculated(Integer r1, Integer r2, Integer bonus) {
-        Bowling.Frame frame = bowling.new Frame(1);
-        Bowling.Frame nextFrame = bowling.new Frame(2);
-        nextFrame.setRoll1(r1);
-        nextFrame.setRoll2(r2);
+            "5,5,1,2,1",
+            "5,5,4,5,4",
+            "5,5,5,5,5",
+            "5,5,10, 5, 10",
+            "5,5,10, 10, 10"})
+    void spareBonus_setNextFrameToCalculateSpareBonus_spareBonusCalculated(
+            Integer r1, Integer r2, Integer r3, Integer r4, Integer bonus) {
+        bowling.roll(r1);
+        bowling.roll(r2);
+        bowling.roll(r3);
+        bowling.roll(r4);
 
-        assertEquals(bonus, frame.spareBonus(2));
+        assertEquals(bonus, bowling.new Frame(null).spareBonus(2));
     }
 
     @Test

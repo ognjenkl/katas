@@ -1,18 +1,21 @@
 package tdd.bowling;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Bowling {
 
     private final Integer TEN = 10;
 
     private Integer score;
-    private Frame[] frames;
+    private Map<Integer, Frame> frameMap;
 
     private int rollCounter;
 
     public Bowling() {
         score = 0;
         rollCounter = 0;
-        frames = new Frame[TEN + 1];
+        frameMap = new HashMap<>();
     }
 
     public void roll(Integer pins) {
@@ -20,20 +23,20 @@ public class Bowling {
         rollCounter++;
 
         for (int i = 1; i <= TEN; i++) {
-            if (frames[i] == null)
-                frames[i] = new Frame(i);
-            else if (frames[i].rollCount == 2)
+            if (frameMap.get(i) == null)
+                frameMap.put(i, new Frame(i));
+            else if (frameMap.get(i).getRollCount() == 2)
                 continue;
 
-            if (frames[i].rollCount == 0) {
-                frames[i].setRoll1(pins);
-                frames[i].rollCount++;
-                if (TEN.equals(frames[i].getRoll1()))
-                    frames[i].rollCount++;
-            } else if (frames[i].rollCount == 1) {
-                frames[i].setRoll2(pins);
-                frames[i].rollCount++;
-                if (TEN.compareTo(frames[i].getRoll1() + frames[i].getRoll2()) < 0)
+            if (frameMap.get(i).getRollCount() == 0) {
+                frameMap.get(i).setRoll1(pins);
+                frameMap.get(i).incrementRollCount();
+                if (TEN.equals(frameMap.get(i).getRoll1()))
+                    frameMap.get(i).incrementRollCount();
+            } else if (frameMap.get(i).getRollCount() == 1) {
+                frameMap.get(i).setRoll2(pins);
+                frameMap.get(i).incrementRollCount();
+                if (TEN.compareTo(frameMap.get(i).getRoll1() + frameMap.get(i).getRoll2()) < 0)
                     throw new IrregularFrameInputException();
             }
             break;
@@ -47,8 +50,8 @@ public class Bowling {
 
     public Integer score() {
         for (int i = 1; i <= TEN; i++)
-            if (frames[i] != null)
-                score += frames[i].scoreTotal(i + 1);
+            if (frameMap.get(i) != null)
+                score += frameMap.get(i).scoreTotal(i + 1);
         return score;
     }
 
@@ -88,23 +91,27 @@ public class Bowling {
         public Integer strikeBonus(Integer nextFrameIndex) {
             Integer retVal;
             if (nextFrameIndex <= TEN)
-                if (frames[nextFrameIndex].isStrike()) {
-                    retVal = frames[nextFrameIndex].score();
+                if (frameMap.get(nextFrameIndex) != null && frameMap.get(nextFrameIndex).isStrike()) {
+                    retVal = frameMap.get(nextFrameIndex).score();
                     retVal += getRoll1(nextFrameIndex + 1);
                 } else
-                    retVal = frames[nextFrameIndex].score();
+                    retVal = frameMap.get(nextFrameIndex) != null
+                            ? frameMap.get(nextFrameIndex).score()
+                            : 0;
             else
                 retVal = 0;
             return retVal;
         }
 
         public Integer scoreTotal(Integer nextFrameIndex) {
+            Integer scoreTotal;
             if (isSpare())
-                return score() + spareBonus(nextFrameIndex);
+                scoreTotal = score() + spareBonus(nextFrameIndex);
             else if (isStrike())
-                return score() + strikeBonus(nextFrameIndex);
+                scoreTotal = score() + strikeBonus(nextFrameIndex);
             else
-                return score();
+                scoreTotal = score();
+            return scoreTotal;
         }
 
         public Integer getFrameIndex() {
@@ -116,7 +123,9 @@ public class Bowling {
         }
 
         private int getRoll1(Integer nextFrameIndex) {
-            return nextFrameIndex <= TEN ? frames[nextFrameIndex].getRoll1() : 0;
+            return nextFrameIndex <= TEN && frameMap.get(nextFrameIndex) != null
+                    ? frameMap.get(nextFrameIndex).getRoll1()
+                    : 0;
         }
 
         public void setRoll1(Integer roll1) {
@@ -129,6 +138,14 @@ public class Bowling {
 
         public void setRoll2(Integer roll2) {
             this.roll2 = roll2;
+        }
+
+        public Integer getRollCount() {
+            return rollCount;
+        }
+
+        public void incrementRollCount() {
+            rollCount++;
         }
     }
 }
