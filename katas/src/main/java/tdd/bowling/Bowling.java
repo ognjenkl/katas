@@ -23,24 +23,48 @@ public class Bowling {
         rollCounter++;
 
         for (int i = 1; i <= TEN; i++) {
-            if (frameMap.get(i) == null)
+            if (existsFrame(i))
                 frameMap.put(i, new Frame(i));
-            else if (frameMap.get(i).getRollCount() == 2)
+
+            if (hasNoRollsInFrame(i)) {
+                processFirstRollInFrame(pins, i);
+            } else if (hasOneRolleInFrame(i)) {
+                processSecondRollInFrame(pins, i);
+            } else if (hasTwoRollsInFrame(i))
                 continue;
 
-            if (frameMap.get(i).getRollCount() == 0) {
-                frameMap.get(i).setRoll1(pins);
-                frameMap.get(i).incrementRollCount();
-                if (TEN.equals(frameMap.get(i).getRoll1()))
-                    frameMap.get(i).incrementRollCount();
-            } else if (frameMap.get(i).getRollCount() == 1) {
-                frameMap.get(i).setRoll2(pins);
-                frameMap.get(i).incrementRollCount();
-                if (TEN.compareTo(frameMap.get(i).getRoll1() + frameMap.get(i).getRoll2()) < 0)
-                    throw new IrregularFrameInputException();
-            }
             break;
         }
+    }
+
+    private void processSecondRollInFrame(Integer pins, int i) {
+        frameMap.get(i).setRoll2(pins);
+        frameMap.get(i).incrementFrameRollCounter();
+        if (TEN.compareTo(frameMap.get(i).getRoll1() + frameMap.get(i).getRoll2()) < 0)
+            throw new IrregularFrameInputException();
+    }
+
+    private void processFirstRollInFrame(Integer pins, int i) {
+        frameMap.get(i).setRoll1(pins);
+        frameMap.get(i).incrementFrameRollCounter();
+        if (TEN.equals(frameMap.get(i).getRoll1()))
+            frameMap.get(i).incrementFrameRollCounter();
+    }
+
+    private boolean existsFrame(int i) {
+        return frameMap.get(i) == null;
+    }
+
+    private boolean hasTwoRollsInFrame(int i) {
+        return frameMap.get(i).getFrameFollCounter() == 2;
+    }
+
+    private boolean hasOneRolleInFrame(int i) {
+        return frameMap.get(i).getFrameFollCounter() == 1;
+    }
+
+    private boolean hasNoRollsInFrame(int i) {
+        return frameMap.get(i).getFrameFollCounter() == 0;
     }
 
     private void pinInputValidation(Integer pins) {
@@ -63,12 +87,12 @@ public class Bowling {
         private final Integer frameIndex;
         private Integer roll1;
         private Integer roll2;
-        Integer rollCount;
+        Integer frameFollCounter;
 
         Frame(Integer frameIndex) {
             roll1 = 0;
             roll2 = 0;
-            rollCount = 0;
+            frameFollCounter = 0;
             this.frameIndex = frameIndex;
         }
 
@@ -91,7 +115,8 @@ public class Bowling {
         public Integer strikeBonus(Integer nextFrameIndex) {
             Integer retVal;
             if (nextFrameIndex <= TEN)
-                if (frameMap.get(nextFrameIndex) != null && frameMap.get(nextFrameIndex).isStrike()) {
+                if (frameMap.get(nextFrameIndex) != null
+                        && frameMap.get(nextFrameIndex).isStrike()) {
                     retVal = frameMap.get(nextFrameIndex).score();
                     retVal += getRoll1(nextFrameIndex + 1);
                 } else
@@ -140,12 +165,12 @@ public class Bowling {
             this.roll2 = roll2;
         }
 
-        public Integer getRollCount() {
-            return rollCount;
+        public Integer getFrameFollCounter() {
+            return frameFollCounter;
         }
 
-        public void incrementRollCount() {
-            rollCount++;
+        public void incrementFrameRollCounter() {
+            frameFollCounter++;
         }
     }
 }
