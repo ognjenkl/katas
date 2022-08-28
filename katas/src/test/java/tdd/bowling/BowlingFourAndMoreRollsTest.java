@@ -101,6 +101,12 @@ public class BowlingFourAndMoreRollsTest {
     @ParameterizedTest
     @CsvSource({
             "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 1,0, 50",
+            "5,5, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 1,0, 60",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 1,5, 55",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 5,5, 1,5, 61",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 4,5, 58",
+//            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 5,5, 59",
+//            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,0, 59",
     })
     void score_tenthFrame_scoreTest(Integer r1, Integer r2, Integer r3, Integer r4, Integer r5,
                                   Integer r6, Integer r7, Integer r8, Integer r9, Integer r10,
@@ -132,4 +138,153 @@ public class BowlingFourAndMoreRollsTest {
         assertEquals(s, score);
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 5,5, 1, 60",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 5,5, 5, 64",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 5,5, 10, 69",
+    })
+    void score_tenthFrameSpare_scoreTest(Integer r1, Integer r2, Integer r3, Integer r4, Integer r5,
+                                    Integer r6, Integer r7, Integer r8, Integer r9, Integer r10,
+                                    Integer r11, Integer r12, Integer r13, Integer r14, Integer r15,
+                                    Integer r16, Integer r17, Integer r18, Integer r19, Integer r20,
+                                    Integer r21, Integer s) {
+        bowling.roll(r1);
+        bowling.roll(r2);
+        bowling.roll(r3);
+        bowling.roll(r4);
+        bowling.roll(r5);
+        bowling.roll(r6);
+        bowling.roll(r7);
+        bowling.roll(r8);
+        bowling.roll(r9);
+        bowling.roll(r10);
+        bowling.roll(r11);
+        bowling.roll(r12);
+        bowling.roll(r13);
+        bowling.roll(r14);
+        bowling.roll(r15);
+        bowling.roll(r16);
+        bowling.roll(r17);
+        bowling.roll(r18);
+        bowling.roll(r19);
+        bowling.roll(r20);
+        bowling.roll(r21);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,0, 0, 59",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,1, 0, 60",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,2, 0, 61",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,1, 1, 61",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,5, 0, 64",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,5, 5, 69",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,10, 0, 69",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,10, 1, 70",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,10, 5, 74",
+            "1,2, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,10, 10, 79",
+            "5,5, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 3,2, 10,10, 10, 89",
+            "5,5, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 5,5, 10,10, 10, 104",
+    })
+    void score_tenthFrameStrike_scoreTest(Integer r1, Integer r2, Integer r3, Integer r4, Integer r5,
+                                          Integer r6, Integer r7, Integer r8, Integer r9, Integer r10,
+                                          Integer r11, Integer r12, Integer r13, Integer r14, Integer r15,
+                                          Integer r16, Integer r17, Integer r18, Integer r19, Integer r20,
+                                          Integer r21, Integer s) {
+        bowling.roll(r1);
+        bowling.roll(r2);
+        bowling.roll(r3);
+        bowling.roll(r4);
+        bowling.roll(r5);
+        bowling.roll(r6);
+        bowling.roll(r7);
+        bowling.roll(r8);
+        bowling.roll(r9);
+        bowling.roll(r10);
+        bowling.roll(r11);
+        bowling.roll(r12);
+        bowling.roll(r13);
+        bowling.roll(r14);
+        bowling.roll(r15);
+        bowling.roll(r16);
+        bowling.roll(r17);
+        bowling.roll(r18);
+        bowling.roll(r19);
+        bowling.roll(r20);
+        bowling.roll(r21);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "5,5, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 5,4, 10, 10,10, 10, 114",
+    })
+    void score_ninthAndTenthFrameStrike_scoreTest(Integer r1, Integer r2, Integer r3, Integer r4, Integer r5,
+                                    Integer r6, Integer r7, Integer r8, Integer r9, Integer r10,
+                                    Integer r11, Integer r12, Integer r13, Integer r14, Integer r15,
+                                    Integer r16, Integer r17, Integer r18, Integer r19, Integer r20,
+                                    Integer s) {
+        bowling.roll(r1);
+        bowling.roll(r2);
+        bowling.roll(r3);
+        bowling.roll(r4);
+        bowling.roll(r5);
+        bowling.roll(r6);
+        bowling.roll(r7);
+        bowling.roll(r8);
+        bowling.roll(r9);
+        bowling.roll(r10);
+        bowling.roll(r11);
+        bowling.roll(r12);
+        bowling.roll(r13);
+        bowling.roll(r14);
+        bowling.roll(r15);
+        bowling.roll(r16);
+        bowling.roll(r17);
+        bowling.roll(r18);
+        bowling.roll(r19);
+        bowling.roll(r20);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "5,5, 3,4, 5,4, 3,2, 1,0, 1,2, 3,4, 10, 10, 10,10, 10, 135",
+    })
+    void score_eighthAndNinthAndTenthFrameStrike_scoreTest(Integer r1, Integer r2, Integer r3, Integer r4, Integer r5,
+                                                   Integer r6, Integer r7, Integer r8, Integer r9, Integer r10,
+                                                   Integer r11, Integer r12, Integer r13, Integer r14, Integer r15,
+                                                   Integer r16, Integer r17, Integer r18, Integer r19,
+                                                   Integer s) {
+        bowling.roll(r1);
+        bowling.roll(r2);
+        bowling.roll(r3);
+        bowling.roll(r4);
+        bowling.roll(r5);
+        bowling.roll(r6);
+        bowling.roll(r7);
+        bowling.roll(r8);
+        bowling.roll(r9);
+        bowling.roll(r10);
+        bowling.roll(r11);
+        bowling.roll(r12);
+        bowling.roll(r13);
+        bowling.roll(r14);
+        bowling.roll(r15);
+        bowling.roll(r16);
+        bowling.roll(r17);
+        bowling.roll(r18);
+        bowling.roll(r19);
+        Integer score = bowling.score();
+
+        assertEquals(s, score);
+    }
 }

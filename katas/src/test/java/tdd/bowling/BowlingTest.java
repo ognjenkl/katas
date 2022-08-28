@@ -98,22 +98,22 @@ class BowlingTest {
         bowling.roll(5);
         bowling.roll(5);
         Frame frame = new Frame(bowling.getFrameMap(), 1);
-        frame.setRoll1(5);
-        frame.setRoll2(5);
+        frame.roll1(5);
+        frame.roll2(5);
         assertTrue(frame.isSpare());
     }
 
     @Test
     void isStrike_frameRolls5And5Strike_true() {
         Frame frame = new Frame(bowling.getFrameMap(), 1);
-        frame.setRoll1(10);
+        frame.roll1(10);
         assertTrue(frame.isStrike());
     }
 
     @Test
     void isStrike_frameRollsStrike_false() {
         Frame frame = new Frame(bowling.getFrameMap(), 1);
-        frame.setRoll1(5);
+        frame.roll1(5);
         assertFalse(frame.isStrike());
     }
 
@@ -128,7 +128,7 @@ class BowlingTest {
         bowling.roll(r1);
         bowling.roll(r2);
         bowling.roll(r3);
-        Integer bonusActual = new Frame(bowling.getFrameMap(), null).strikeBonus(2);
+        Integer bonusActual = new Frame(bowling.getFrameMap(), 1).strikeBonus(2);
         assertEquals(bonusExpected, bonusActual);
 
     }
@@ -147,7 +147,8 @@ class BowlingTest {
         bowling.roll(r3);
         bowling.roll(r4);
 
-        assertEquals(bonus, new Frame(bowling.getFrameMap(), null).spareBonus(2));
+        assertEquals(bonus, new Frame(bowling.getFrameMap(), 1).spareBonus(2));
+        assertEquals(bonus, new Frame(bowling.getFrameMap(), 1).spareBonus(2));
     }
 
     @Test

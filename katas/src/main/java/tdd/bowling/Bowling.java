@@ -22,61 +22,58 @@ public class Bowling {
         pinInputValidation(pins);
         rollCounter++;
 
-        for (int i = 1; i <= TEN; i++) {
-            if (existsFrame(i))
-                frameMap.put(i, new Frame(frameMap, i));
+        for (int frameNo = 1; frameNo <= TEN; frameNo++) {
+            if (!existsFrame(frameNo)) {
+                addToMapFrame(frameNo);
+            }
 
-            if (hasNoRollsInFrame(i)) {
-                processFirstRollInFrame(pins, i);
-            } else if (hasOneRolleInFrame(i)) {
-                processSecondRollInFrame(pins, i);
-            } else if (hasTwoRollsInFrame(i))
+            if (hasNoRollsInFrame(frameNo)) {
+                getFrame(frameNo).roll1(pins);
+            } else if (hasOneRollInFrame(frameNo)) {
+                getFrame(frameNo).roll2(pins);
+            } else if (hasTwoRollsInFrame(frameNo) && TEN.equals(frameNo)) {
+                getFrame(TEN).roll3(pins);
+            } else
                 continue;
 
             break;
         }
     }
 
-    private void processSecondRollInFrame(Integer pins, int i) {
-        frameMap.get(i).setRoll2(pins);
-        frameMap.get(i).incrementFrameRollCounter();
-        if (TEN.compareTo(frameMap.get(i).getRoll1() + frameMap.get(i).getRoll2()) < 0)
-            throw new IrregularFrameInputException();
+    public Integer score() {
+        for (int frameNo = 1; frameNo <= TEN; frameNo++)
+            if (getFrame(frameNo) != null)
+                score += getFrame(frameNo).scoreTotal(frameNo + 1);
+        return score;
     }
 
-    private void processFirstRollInFrame(Integer pins, int i) {
-        frameMap.get(i).setRoll1(pins);
-        frameMap.get(i).incrementFrameRollCounter();
-        if (TEN.equals(frameMap.get(i).getRoll1()))
-            frameMap.get(i).incrementFrameRollCounter();
+    private void addToMapFrame(int i) {
+        frameMap.put(i, new Frame(frameMap, i));
+    }
+
+    private Frame getFrame(int i) {
+        return frameMap.get(i);
     }
 
     private boolean existsFrame(int i) {
-        return frameMap.get(i) == null;
+        return getFrame(i) != null;
     }
 
     private boolean hasTwoRollsInFrame(int i) {
-        return frameMap.get(i).getFrameFollCounter() == 2;
+        return getFrame(i).getRollCounter() == 2;
     }
 
-    private boolean hasOneRolleInFrame(int i) {
-        return frameMap.get(i).getFrameFollCounter() == 1;
+    private boolean hasOneRollInFrame(int i) {
+        return getFrame(i).getRollCounter() == 1;
     }
 
-    private boolean hasNoRollsInFrame(int i) {
-        return frameMap.get(i).getFrameFollCounter() == 0;
+    private boolean hasNoRollsInFrame(int ordinalFrameNumber) {
+        return getFrame(ordinalFrameNumber).getRollCounter() == 0;
     }
 
     private void pinInputValidation(Integer pins) {
         if (pins == null || pins < 0 || TEN.compareTo(pins) < 0)
             throw new IrregularInputException();
-    }
-
-    public Integer score() {
-        for (int i = 1; i <= TEN; i++)
-            if (frameMap.get(i) != null)
-                score += frameMap.get(i).scoreTotal(i + 1);
-        return score;
     }
 
     public Integer getRollCounter() {
