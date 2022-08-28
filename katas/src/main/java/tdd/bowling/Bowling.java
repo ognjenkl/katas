@@ -3,24 +3,20 @@ package tdd.bowling;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Bowling {
+class Bowling {
 
-    public static final Integer TEN = 10;
+    static final Integer TEN = 10;
 
     private Integer score;
-    private Map<Integer, Frame> frameMap;
+    private final Map<Integer, Frame> frameMap;
 
-    private int rollCounter;
-
-    public Bowling() {
+    Bowling() {
         score = 0;
-        rollCounter = 0;
         frameMap = new HashMap<>();
     }
 
     public void roll(Integer pins) {
         pinInputValidation(pins);
-        rollCounter++;
 
         for (int frameNo = 1; frameNo <= TEN; frameNo++) {
             if (!existsFrame(frameNo)) {
@@ -33,8 +29,9 @@ public class Bowling {
                 getFrame(frameNo).roll2(pins);
             } else if (hasTwoRollsInFrame(frameNo) && TEN.equals(frameNo)) {
                 getFrame(TEN).roll3(pins);
-            } else
+            } else {
                 continue;
+            }
 
             break;
         }
@@ -43,7 +40,7 @@ public class Bowling {
     public Integer score() {
         for (int frameNo = 1; frameNo <= TEN; frameNo++)
             if (getFrame(frameNo) != null)
-                score += getFrame(frameNo).scoreTotal(frameNo + 1);
+                score += getFrame(frameNo).scoreTotal(getFrame(frameNo + 1));
         return score;
     }
 
@@ -76,11 +73,7 @@ public class Bowling {
             throw new IrregularInputException();
     }
 
-    public Integer getRollCounter() {
-        return rollCounter;
-    }
-
-    public Map<Integer, Frame> getFrameMap() {
+    Map<Integer, Frame> getFrameMap() {
         return frameMap;
     }
 

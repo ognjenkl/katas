@@ -75,7 +75,6 @@ class BowlingTest {
         assertEquals(10, score);
     }
 
-
     @Test
     void roll_inputNullPins_shouldThrowIrregularInputExceptionTest() {
         assertThrows(IrregularInputException.class, () -> bowling.roll(null));
@@ -90,7 +89,6 @@ class BowlingTest {
     void roll_inputGT10Pins_shouldThrowIrregularInputExceptionTest() {
         assertThrows(IrregularInputException.class, () -> bowling.roll(11));
     }
-
 
 
     @Test
@@ -119,55 +117,42 @@ class BowlingTest {
 
     @ParameterizedTest
     @CsvSource({
-            "10, 1,2,3",
-            "10, 4,5,9",
-            "10, 5,5,10",
+            "10, 1,2, 3",
+            "10, 4,5, 9",
+            "10, 5,5, 10",
             "10, 10, 5, 15",
             "10, 10, 10, 20"})
     void strikeBonus_setNextFrameToCalculateStrikeBonus_strikeBonusCalculated(Integer r1, Integer r2, Integer r3, Integer bonusExpected) {
         bowling.roll(r1);
         bowling.roll(r2);
         bowling.roll(r3);
-        Integer bonusActual = new Frame(bowling.getFrameMap(), 1).strikeBonus(2);
+        Frame frame = new Frame(bowling.getFrameMap(), 1);
+        Integer bonusActual = frame.strikeBonus(bowling.getFrameMap().get(2));
         assertEquals(bonusExpected, bonusActual);
 
     }
 
     @ParameterizedTest
     @CsvSource({
-            "5,5,1,2,1",
-            "5,5,4,5,4",
-            "5,5,5,5,5",
-            "5,5,10, 5, 10",
-            "5,5,10, 10, 10"})
+            "5,5, 1,2, 1",
+            "5,5, 4,5, 4",
+            "5,5, 5,5, 5",
+            "5,5, 10, 5, 10",
+            "5,5, 10, 10, 10"})
     void spareBonus_setNextFrameToCalculateSpareBonus_spareBonusCalculated(
             Integer r1, Integer r2, Integer r3, Integer r4, Integer bonus) {
         bowling.roll(r1);
         bowling.roll(r2);
         bowling.roll(r3);
         bowling.roll(r4);
+        Frame frame = new Frame(bowling.getFrameMap(), 1);
 
-        assertEquals(bonus, new Frame(bowling.getFrameMap(), 1).spareBonus(2));
-        assertEquals(bonus, new Frame(bowling.getFrameMap(), 1).spareBonus(2));
+        assertEquals(bonus, frame.spareBonus(bowling.getFrameMap().get(2)));
     }
 
     @Test
     void frameIndex_onFrameCreationPass1_index1() {
         Frame frame = new Frame(bowling.getFrameMap(), 1);
         assertEquals(1, frame.getFrameIndex());
-    }
-
-    @Test
-    void roll_saveRollCount_rollCount1() {
-        bowling.roll(1);
-        assertEquals(1, bowling.getRollCounter());
-    }
-
-    @Test
-    void roll_saveRollCounts_rollCount3() {
-        bowling.roll(1);
-        bowling.roll(1);
-        bowling.roll(1);
-        assertEquals(3, bowling.getRollCounter());
     }
 }

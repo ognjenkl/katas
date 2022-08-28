@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
-public class BowlningTwoRollsTest {
+class BowlingTwoRollsTest {
 
     private Bowling bowling;
 
@@ -58,10 +58,10 @@ public class BowlningTwoRollsTest {
 
     @ParameterizedTest
     @CsvSource({
-            "5,4,9",
-            "5,5,10",
-            "9,1,10",
-            "0,2,2"})
+            "5,4, 9",
+            "5,5, 10",
+            "9,1, 10",
+            "0,2, 2"})
     void score_twoRolls_score(Integer r1, Integer r2, Integer s) {
         bowling.roll(r1);
         bowling.roll(r2);
@@ -81,11 +81,11 @@ public class BowlningTwoRollsTest {
 
     @ParameterizedTest
     @CsvSource({
-            "10,6,22",
-            "10,7,24",
-            "10,1,12",
-            "10,9,28",
-            "10,10,30"
+            "10,6, 22",
+            "10,7, 24",
+            "10,1, 12",
+            "10,9, 28",
+            "10,10, 30"
     })
     void score_twoRollsStrike_scoreTest(Integer r1, Integer r2, Integer s) {
         bowling.roll(r1);
