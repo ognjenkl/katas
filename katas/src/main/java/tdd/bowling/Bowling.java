@@ -7,21 +7,14 @@ class Bowling {
 
     static final Integer TEN = 10;
 
-    private Integer score;
-    private final Map<Integer, Frame> frameMap;
-
-    Bowling() {
-        score = 0;
-        frameMap = new HashMap<>();
-    }
+    private Integer score = 0;
+    private final Map<Integer, Frame> frameMap = new HashMap<>();
 
     public void roll(Integer pins) {
         pinInputValidation(pins);
 
         for (int frameNo = 1; frameNo <= TEN; frameNo++) {
-            if (!existsFrame(frameNo)) {
-                addToMapFrame(frameNo);
-            }
+            addNewFrameIfDoesNotExist(frameNo, new Frame(frameNo));
 
             if (hasNoRollsInFrame(frameNo)) {
                 getFrame(frameNo).roll1(pins);
@@ -37,19 +30,24 @@ class Bowling {
         }
     }
 
+    private void addNewFrameIfDoesNotExist(int frameNo, Frame frame) {
+        if (!existsFrame(frameNo)) {
+            frameMap.put(frameNo, frame);
+        }
+    }
+
     public Integer score() {
-        for (int frameNo = 1; frameNo <= TEN; frameNo++)
-            if (getFrame(frameNo) != null)
-                score += getFrame(frameNo).scoreTotal(getFrame(frameNo + 1));
+        for (int frameNo = 1; frameNo <= TEN; frameNo++) {
+            if (existsFrame(frameNo)) {
+                score += getFrame(frameNo).scoreTotal(
+                        getFrame(frameNo + 1), getFrame(frameNo + 2));
+            }
+        }
         return score;
     }
 
-    private void addToMapFrame(int i) {
-        frameMap.put(i, new Frame(frameMap, i));
-    }
-
-    private Frame getFrame(int i) {
-        return frameMap.get(i);
+    private Frame getFrame(int frameNo) {
+        return frameMap.get(frameNo);
     }
 
     private boolean existsFrame(int i) {
@@ -76,5 +74,4 @@ class Bowling {
     Map<Integer, Frame> getFrameMap() {
         return frameMap;
     }
-
 }

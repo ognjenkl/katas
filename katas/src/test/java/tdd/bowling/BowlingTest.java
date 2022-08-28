@@ -95,7 +95,7 @@ class BowlingTest {
     void isSpare_frameRolls5And5Spare_true() {
         bowling.roll(5);
         bowling.roll(5);
-        Frame frame = new Frame(bowling.getFrameMap(), 1);
+        Frame frame = new Frame(1);
         frame.roll1(5);
         frame.roll2(5);
         assertTrue(frame.isSpare());
@@ -103,14 +103,14 @@ class BowlingTest {
 
     @Test
     void isStrike_frameRolls5And5Strike_true() {
-        Frame frame = new Frame(bowling.getFrameMap(), 1);
+        Frame frame = new Frame(1);
         frame.roll1(10);
         assertTrue(frame.isStrike());
     }
 
     @Test
     void isStrike_frameRollsStrike_false() {
-        Frame frame = new Frame(bowling.getFrameMap(), 1);
+        Frame frame = new Frame(1);
         frame.roll1(5);
         assertFalse(frame.isStrike());
     }
@@ -122,12 +122,13 @@ class BowlingTest {
             "10, 5,5, 10",
             "10, 10, 5, 15",
             "10, 10, 10, 20"})
-    void strikeBonus_setNextFrameToCalculateStrikeBonus_strikeBonusCalculated(Integer r1, Integer r2, Integer r3, Integer bonusExpected) {
+    void strikeBonus_setNextFrameToCalculateStrikeBonus_strikeBonusCalculated(
+            Integer r1, Integer r2, Integer r3, Integer bonusExpected) {
         bowling.roll(r1);
         bowling.roll(r2);
         bowling.roll(r3);
-        Frame frame = new Frame(bowling.getFrameMap(), 1);
-        Integer bonusActual = frame.strikeBonus(bowling.getFrameMap().get(2));
+        Frame frame = new Frame(1);
+        Integer bonusActual = frame.strikeBonus(bowling.getFrameMap().get(2), bowling.getFrameMap().get(3));
         assertEquals(bonusExpected, bonusActual);
 
     }
@@ -145,14 +146,8 @@ class BowlingTest {
         bowling.roll(r2);
         bowling.roll(r3);
         bowling.roll(r4);
-        Frame frame = new Frame(bowling.getFrameMap(), 1);
+        Frame frame = new Frame(1);
 
         assertEquals(bonus, frame.spareBonus(bowling.getFrameMap().get(2)));
-    }
-
-    @Test
-    void frameIndex_onFrameCreationPass1_index1() {
-        Frame frame = new Frame(bowling.getFrameMap(), 1);
-        assertEquals(1, frame.getFrameIndex());
     }
 }
