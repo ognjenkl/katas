@@ -6,10 +6,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import tdd.bankKata.Account;
-import tdd.bankKata.Clock;
-import tdd.bankKata.Console;
-import tdd.bankKata.TransactionRepository;
+import tdd.bankKata.*;
 
 /*
     Create simple bank application with the following features:
@@ -42,13 +39,12 @@ public class BankAcceptanceTest {
 
     @Mock
     private Console console;
-    @Mock
-    private Clock clock;
 
     @Test
     void shourdPrintStatemenContainingAllTransactions() {
         TransactionRepository transactionRepository = new TransactionRepository();
-        Account account = new Account(transactionRepository);
+        StatementPrinter statementPrinter = new StatementPrinter();
+        Account account = new Account(transactionRepository, statementPrinter);
         account.deposit(1000);
         account.withdraw(100);
         account.deposit(500);
@@ -56,9 +52,9 @@ public class BankAcceptanceTest {
         account.printStatement();
 
         InOrder inOrder = Mockito.inOrder(console);
-        inOrder.verify(console).println("DATE | AMOUNT | BALANCE");
-        inOrder.verify(console).println("10/04/2014 | 500.00 | 1400.00");
-        inOrder.verify(console).println("02/04/2014 | -100.00 | 900.00");
-        inOrder.verify(console).println("01/04/2014 | 1000.00 | 1000.00");
+        inOrder.verify(console).printStatementLine("DATE | AMOUNT | BALANCE");
+        inOrder.verify(console).printStatementLine("10/04/2014 | 500.00 | 1400.00");
+        inOrder.verify(console).printStatementLine("02/04/2014 | -100.00 | 900.00");
+        inOrder.verify(console).printStatementLine("01/04/2014 | 1000.00 | 1000.00");
     }
 }

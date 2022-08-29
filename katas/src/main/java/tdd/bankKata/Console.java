@@ -1,7 +1,7 @@
 package tdd.bankKata;
 
 public class Console {
-    public void println(String message) {
+    public void printStatementLine(String message) {
 
     }
 }
