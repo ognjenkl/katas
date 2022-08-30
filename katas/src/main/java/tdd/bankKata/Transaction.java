@@ -9,4 +9,12 @@ public class Transaction {
         this.date = date;
         this.amount = amount;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 }

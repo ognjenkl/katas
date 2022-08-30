@@ -1,12 +1,10 @@
 package tdd.bankKata;
 
 
-import java.util.List;
-
 public class Account {
 
-    private TransactionRepository transactionRepository;
-    private StatementPrinter statementPrinter;
+    private final TransactionRepository transactionRepository;
+    private final StatementPrinter statementPrinter;
 
     public Account(TransactionRepository transactionRepository, StatementPrinter statementPrinter) {
         this.transactionRepository = transactionRepository;
@@ -22,7 +20,6 @@ public class Account {
     }
 
     public void printStatement() {
-        List<Transaction> transactionList = transactionRepository.getAll();
-        statementPrinter.print(transactionList);
+        statementPrinter.print(transactionRepository.getAll());
     }
 }
