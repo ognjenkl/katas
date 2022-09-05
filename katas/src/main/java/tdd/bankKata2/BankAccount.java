@@ -2,9 +2,11 @@ package tdd.bankKata2;
 
 public class BankAccount {
     private BankTransactionRepository bankTransactionRepository;
+    private final BankStatementPrinter bankStatementPrinter;
 
-    public BankAccount(BankTransactionRepository bankTransactionRepository) {
+    public BankAccount(BankTransactionRepository bankTransactionRepository, BankStatementPrinter bankStatementPrinter) {
         this.bankTransactionRepository = bankTransactionRepository;
+        this.bankStatementPrinter = bankStatementPrinter;
     }
 
     public void deposit(int amount) {
@@ -16,6 +18,6 @@ public class BankAccount {
     }
 
     public void printStatement() {
-//        throw new UnsupportedOperationException();
+        bankStatementPrinter.print(bankTransactionRepository.getAll());
     }
 }
