@@ -6,20 +6,21 @@ import java.time.LocalDate;
 
 public class CardValidator {
 
-    boolean validateCard(Customer customer) {
-        return isChecksumValid(customer) && isMonthYearValid(customer);
+    boolean validateCard(String number, int expirationMonth, int expirationYear) {
+        return isChecksumValid(number)
+                && isMonthYearValid(expirationMonth, expirationYear);
     }
 
-    boolean isMonthYearValid(Customer customer) {
+    boolean isMonthYearValid(int expirationMonth, int expiryYear) {
         boolean monthYearValid = LocalDate.of(
-                customer.getExpYear(), customer.getExpMonth(), 1).isAfter(LocalDate.now());
+                expiryYear, expirationMonth, 1).isAfter(LocalDate.now());
         return monthYearValid;
     }
 
-    boolean isChecksumValid(Customer customer) {
+    boolean isChecksumValid(String number) {
         Integer checksum = 0;
-        for (int i = 0; i < customer.getNumber().length(); i++) {
-            Integer digit = Integer.parseInt(customer.getNumber().substring(i, i + 1));
+        for (int i = 0; i < number.length(); i++) {
+            Integer digit = Integer.parseInt(number.substring(i, i + 1));
             if (i % 2 == 0) {
                 digit *= 2;
                 if (digit > 9) {
@@ -40,12 +41,12 @@ public class CardValidator {
         customer.setExpMonth(1);
         customer.setExpYear(2024);
 
-        customer.setValid(cardValidator.validateCard(customer));
+        customer.setValid(cardValidator.validateCard(
+                customer.getNumber(), customer.getExpMonth(), customer.getExpYear()));
         System.out.println("Is Alice's card valid?");
         System.out.println(customer.isValid());
         System.out.println(customer);
     }
-
 
     @Data
     static class Customer {
