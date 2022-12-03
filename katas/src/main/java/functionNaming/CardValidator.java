@@ -7,8 +7,7 @@ import java.time.LocalDate;
 public class CardValidator {
 
     boolean validateCard(Customer customer) {
-        customer.setValid(isChecksumValid(customer) && isMonthYearValid(customer));
-        return customer.isValid();
+        return isChecksumValid(customer) && isMonthYearValid(customer);
     }
 
     boolean isMonthYearValid(Customer customer) {
@@ -41,9 +40,9 @@ public class CardValidator {
         customer.setExpMonth(1);
         customer.setExpYear(2024);
 
-        boolean isValid = cardValidator.validateCard(customer);
+        customer.setValid(cardValidator.validateCard(customer));
         System.out.println("Is Alice's card valid?");
-        System.out.println(isValid);
+        System.out.println(customer.isValid());
         System.out.println(customer);
     }
 
