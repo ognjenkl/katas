@@ -13,7 +13,8 @@ public class Holiday {
         employee.setRole(Role.ENGINEER);
         employee.setVacationDays(25);
 
-        employee.takeHoliday(1, true);
+//        employee.payoutHoliday();
+        employee.takeHoliday(5);
     }
 
     @Data
@@ -22,27 +23,27 @@ public class Holiday {
         Role role;
         int vacationDays;
 
-        public void takeHoliday(int numberOfDays, boolean payout) {
-            if (payout) {
-                if (vacationDays < FIXED_VACATION_DAYS_PAYOUT) {
-                    throw new IllegalArgumentException(
-                            String.format("You don't have enough holidays left over for a payout. "
-                                    + "Remaining holidays: %d.", vacationDays));
-                }
-                vacationDays -= FIXED_VACATION_DAYS_PAYOUT;
-                System.out.printf("Paying out a holiday. Holidays left: %d%n", vacationDays);
-            } else {
-                if (vacationDays < numberOfDays) {
-                    throw new IllegalArgumentException("You don't have any holidays left. "
-                            + "Now back to work, you!");
-                }
-                vacationDays -= numberOfDays;
-                System.out.println("Have fun on your holiday. Don't forget to check your emails!");
+        public void takeHoliday(int numberOfDays) {
+            if (vacationDays < numberOfDays) {
+                throw new IllegalArgumentException("You don't have any holidays left. "
+                        + "Now back to work, you!");
             }
+            vacationDays -= numberOfDays;
+            System.out.println("Have fun on your holiday. Don't forget to check your emails!");
+        }
+
+        public void payoutHoliday() {
+            if (vacationDays < FIXED_VACATION_DAYS_PAYOUT) {
+                throw new IllegalArgumentException(
+                        String.format("You don't have enough holidays left over for a payout. "
+                                + "Remaining holidays: %d.", vacationDays));
+            }
+            vacationDays -= FIXED_VACATION_DAYS_PAYOUT;
+            System.out.printf("Paying out a holiday. Holidays left: %d%n", vacationDays);
         }
     }
 
     enum Role {
-        PRESIDENT, VICEPRESIDENT, MANAGER, LEAD, ENGINEER, INTERN;
+        PRESIDENT, VICE_PRESIDENT, MANAGER, LEAD, ENGINEER, INTERN;
     }
 }
