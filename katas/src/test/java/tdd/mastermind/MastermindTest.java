@@ -1,12 +1,11 @@
 package tdd.mastermind;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /*
 Mastermind
@@ -44,26 +43,116 @@ the answer should be :
 
 public class MastermindTest {
 
+    Mastermind mastermind;
+    MastermindPrinter mastermindPrinter;
+
+    @BeforeEach
+    void setUp() {
+        mastermindPrinter = new MastermindPrinterImpl();
+        mastermind = new Mastermind(mastermindPrinter);
+    }
+
     @ParameterizedTest
     @CsvSource({
-            "AAAA,00",
-            "AAAB,01",
-            "AABC,02",
-            "DABC,03",
-            "DEBC,04",
-            "BAAA,10",
-            "BCAA,20",
-            "BCDA,30",
-            "BCDE,40",
-            "BCED,22",
-            "BDEC,13",
-            "ADEC,03",
-            "DECA,03",
-            "DEAA,02",
+            "BCDE,AAAA,00",
+            "BCDE,AAAB,01",
+            "BCDE,AABC,02",
+            "BCDE,DABC,03",
+            "BCDE,DEBC,04",
+            "BCDE,BAAA,10",
+            "BCDE,BCAA,20",
+            "BCDE,BCDA,30",
+            "BCDE,BCDE,40",
+            "BCDE,BCED,22",
+            "BCDE,BDEC,13",
+            "BCDE,ADEC,03",
+            "BCDE,DECA,03",
+            "BCDE,DEAA,02",
     })
-    void shouldGuessWellPlacedAndMisplaced(String guess, String expected) {
-        Mastermind mastermind = new Mastermind();
+    void shouldGuessWellPlacedAndMisplaced(String score, String guess, String expected) {
+        mastermind.setScore(score);
         String guesses = mastermind.guess(guess);
         assertEquals(expected, guesses);
     }
+
+    @Test
+    void shoudScoreHaveAllWellPlacedPegs() {
+        mastermind.setScore("AAAA");
+        String guesses = mastermind.guess("AAAA");
+        assertEquals("40", guesses);
+    }
+
+    @Test
+    void shouldScoreNotHaveAllWellPlacedPegs() {
+        mastermind.setScore("AAAA");
+        String guesses = mastermind.guess("BAAA");
+        assertNotEquals("40", guesses);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "AAAA,AAAA,4",
+            "AAAA,BAAA,3",
+            "AAAA,BBAA,2",
+            "AAAA,BBBA,1",
+            "AAAA,BBBB,0",
+    })
+    void shouldReturnWellPlacedPegs(String score, String guess, Integer expected) {
+        mastermind.setScore(score);
+        mastermind.guess(guess);
+        assertEquals(expected, mastermind.getWellPlacedPegs());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "ABCD,EEEE,0",
+            "ABCD,EEEA,1",
+            "ABCD,EEAB,2",
+            "ABCD,EABC,3",
+            "ABCD,DABC,4",
+    })
+    void shouldReturnMisplacedPegsNumber(String score, String guess, Integer expected) {
+        mastermind.setScore(score);
+        mastermind.guess(guess);
+        assertEquals(expected, mastermind.getMisplacedPegs());
+    }
+
+    @Test
+    void givenGuess_whenZeroCorrectPegs_thenPrintEmptyString() {
+        mastermind.setScore("BBBB");
+        String guess = "AAAA";
+        mastermind.guess(guess);
+        assertEquals(guess + "\n", mastermind.print());
+    }
+
+    @Test
+    void givenGuess_when1WellPlaced_thenPrintPlusSign() {
+        mastermind.setScore("ABBB");
+        String guess = "AAAA";
+        mastermind.guess(guess);
+        assertEquals(guess + "\n" + "+", mastermind.print());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "BCDE,AAAB,-",
+            "BCDE,AABC,--",
+            "BCDE,DABC,---",
+            "BCDE,DEBC,----",
+            "BCDE,BAAA,+",
+            "BCDE,BCAA,++",
+            "BCDE,BCDA,+++",
+            "BCDE,BCDE,++++",
+            "BCDE,BCED,++--",
+            "BCDE,BDEC,+---",
+            "BCDE,ADEC,---",
+            "BCDE,DECA,---",
+            "BCDE,DEAA,--",
+    })
+    void givenGuess_when1WellPlaced_thenPrintPlusMinusSigns(String score, String guess, String expected) {
+        mastermind.setScore(score);
+        mastermind.guess(guess);
+        assertEquals(guess + "\n" + expected, mastermind.print());
+    }
+
 }
