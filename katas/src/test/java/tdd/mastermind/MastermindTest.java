@@ -48,7 +48,7 @@ public class MastermindTest {
 
     @BeforeEach
     void setUp() {
-        mastermindPrinter = new MastermindPrinterImpl();
+        mastermindPrinter = new MastermindPrinterPlusMinusSign();
         mastermind = new Mastermind(mastermindPrinter);
     }
 
@@ -155,4 +155,26 @@ public class MastermindTest {
         assertEquals(guess + "\n" + expected, mastermind.print());
     }
 
+    @ParameterizedTest
+    @CsvSource(delimiterString = ":", value = {
+            "BCDE:AAAB:[0,1]",
+            "BCDE:AABC:[0,2]",
+            "BCDE:DABC:[0,3]",
+            "BCDE:DEBC:[0,4]",
+            "BCDE:BAAA:[1,0]",
+            "BCDE:BCAA:[2,0]",
+            "BCDE:BCDA:[3,0]",
+            "BCDE:BCDE:[4,0]",
+            "BCDE:BCED:[2,2]",
+            "BCDE:BDEC:[1,3]",
+            "BCDE:ADEC:[0,3]",
+            "BCDE:DECA:[0,3]",
+            "BCDE:DEAA:[0,2]",
+    })
+    void givenGuess_when1WellPlaced_thenPrintNumberList(String score, String guess, String expected) {
+        mastermind = new Mastermind(new MastermindPrinterNumberList());
+        mastermind.setScore(score);
+        mastermind.guess(guess);
+        assertEquals(guess + "\n" + expected, mastermind.print());
+    }
 }

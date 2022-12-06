@@ -2,11 +2,13 @@ package tdd.mastermind;
 
 import java.util.List;
 
-public class MastermindPrinterImpl implements MastermindPrinter {
+public class MastermindPrinterPlusMinusSign implements MastermindPrinter {
 
     @Override
     public String print(String guess, List<Integer> result) {
-        return guess + "\n" + resultToString(result);
+        String retVal =  guess + "\n" + resultToString(result);
+        System.out.println(retVal);
+        return retVal;
     }
 
     private String resultToString(List<Integer> result) {
