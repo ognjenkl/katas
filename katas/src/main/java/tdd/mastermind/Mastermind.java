@@ -28,8 +28,8 @@ public class Mastermind {
         }
 
 
-        System.out.println(guess);
-        System.out.println(result.get(0).toString() + result.get(1));
+//        System.out.println(guess);
+//        System.out.println(result.get(0).toString() + result.get(1));
         return result.get(0).toString() + result.get(1);
     }
 
@@ -58,5 +58,9 @@ public class Mastermind {
 
     public String print() {
         return mastermindPrinter.print(guess, result);
+    }
+
+    public String printGuessResult() {
+        return mastermindPrinter.printResult(result);
     }
 }

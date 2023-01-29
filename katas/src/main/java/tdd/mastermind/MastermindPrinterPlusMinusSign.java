@@ -11,6 +11,13 @@ public class MastermindPrinterPlusMinusSign implements MastermindPrinter {
         return retVal;
     }
 
+    @Override
+    public String printResult(List<Integer> result) {
+        String retVal = resultToString(result);
+        System.out.println(retVal);
+        return retVal;
+    }
+
     private String resultToString(List<Integer> result) {
         return "+".repeat(Math.max(0, result.get(0)))
                 + "-".repeat(Math.max(0, result.get(1)));
