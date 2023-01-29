@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="katas" target="11" />
+      <module name="katas" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
