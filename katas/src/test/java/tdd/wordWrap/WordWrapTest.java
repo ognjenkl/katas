@@ -132,4 +132,24 @@ public class WordWrapTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    void givenTreeWords_whenWrap_thenReturnThreeLines() {
+        String expected = "hello\\nnew\\nworld";
+        String input = "hello new world";
+
+        String result = wordWrap.wrap(input, 6);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void givenTwoWords_whenWordEndsOnLimit_thenBreakBeforeSpace() {
+        String expected = "hello\\nworld";
+        String input = "hello world";
+
+        String result = wordWrap.wrap(input, 5);
+
+        assertEquals(expected, result);
+    }
 }

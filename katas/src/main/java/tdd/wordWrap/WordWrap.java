@@ -12,23 +12,19 @@ public class WordWrap {
         validate(input, limit);
         input = input.trim();
         String result = "";
-        if (input.length() > limit) {
-            if (WHITE_SPACE.equals("" + input.charAt(limit - 1))) {
-                result = input.substring(0, limit - 1) + NEW_LINE_CHARACTER;
-                input = input.substring(limit);
-            } else if (input.substring(0, limit).contains(WHITE_SPACE)) {
-                List<String> brokenLines = breakLines(input, " ");
+        while (input.length() > limit) {
+            if (input.length() > limit) {
+                List<String> brokenLines = breakLines(input, " ", limit);
                 result += brokenLines.get(0) + NEW_LINE_CHARACTER;
                 input = brokenLines.get(1);
-//                input = replaceLastOccurrence(input, " ", NEW_LINE_CHARACTER);
             }
         }
         result += input;
         return result;
     }
 
-    private List<String> breakLines(String input, String breakingString) {
-        int index = input.lastIndexOf(breakingString);
+    private List<String> breakLines(String input, String breakingString, Integer limit) {
+        int index = input.substring(0, limit + 1).lastIndexOf(breakingString);
         List<String> list = new ArrayList<>();
         list.add(input.substring(0, index));
         list.add(input.substring(index + breakingString.length()));
