@@ -11,24 +11,21 @@ public class WordWrap {
     public String wrap(String input, Integer limit) {
         validate(input, limit);
         input = input.trim();
-        String result = "";
+        StringBuilder result = new StringBuilder();
         while (input.length() > limit) {
-            if (input.length() > limit) {
-                List<String> brokenLines = breakLines(input, " ", limit);
-                result += brokenLines.get(0) + NEW_LINE_CHARACTER;
-                input = brokenLines.get(1);
-            }
+            List<String> brokenLines = breakLines(input, " ", limit);
+            result.append(brokenLines.get(0)).append(NEW_LINE_CHARACTER);
+            input = brokenLines.get(1);
         }
-        result += input;
-        return result;
+        result.append(input);
+        return result.toString();
     }
 
     private List<String> breakLines(String input, String breakingString, Integer limit) {
         int index = input.substring(0, limit + 1).lastIndexOf(breakingString);
-        List<String> list = new ArrayList<>();
-        list.add(input.substring(0, index));
-        list.add(input.substring(index + breakingString.length()));
-        return list;
+        String first = input.substring(0, index);
+        String second = input.substring(index + breakingString.length());
+        return List.of(first, second);
     }
 
     private String replaceLastOccurrence(String input, String toReplace, String replacement) {
