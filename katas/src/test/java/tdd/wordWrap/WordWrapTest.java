@@ -85,11 +85,51 @@ public class WordWrapTest {
     }
 
     @Test
-    void givenWordsLongerThanLimit_whenWrap_thenReturnTwoLines() {
+    void givenTwoWords_whenWrap_thenReturnTwoLines() {
         String expected = "hello\\nworld";
         String result = wordWrap.wrap("hello world", 7);
 
         assertEquals(expected, result);
 
+    }
+
+    @Test
+    void givenMultipleWords_whenWrap_thenReturnOneLine() {
+        String expected = "hello new world";
+        String input = "hello new world";
+
+        String result = wordWrap.wrap(input, 27);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void givenThreeWords_whenWrap_thenSeparateOnFirstSpace() {
+        String expected = "hello\\nwor ld";
+        String input = "hello wor ld";
+
+        String result = wordWrap.wrap(input, 6);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void givenThreeWords_whenWrap_thenSeparateOnLastSpace() {
+        String expected = "hello wor\\nld";
+        String input = "hello wor ld";
+
+        String result = wordWrap.wrap(input, 10);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void givenTwoWords_whenWrap_thenSeparateOnLastWord() {
+        String expected = "hello new\\nworld";
+        String input = "hello new world";
+
+        String result = wordWrap.wrap(input, 12);
+
+        assertEquals(expected, result);
     }
 }
