@@ -52,28 +52,44 @@ public class WordWrapTest {
     }
 
     @Test
-    void givenNullForStringAndNullForLimit_whenWrap_thenThrowLimitException() {
+    void givenNullInputAndNullLimit_whenWrap_thenThrowLimitException() {
 
         assertThrows(WordWrap.LimitException.class, () -> wordWrap.wrap(null, null));
     }
 
     @Test
-    void givenNullAnd0_whenWrap_thenThrowLimitException() {
+    void givenNullInputAndZeroLimit_whenWrap_thenThrowLimitException() {
         assertThrows(WordWrap.LimitException.class, () -> wordWrap.wrap(null, 0));
     }
 
     @Test
-    void givenNullAnd1_whenWrap_thenReturnNull() {
-        String result = wordWrap.wrap(null, 1);
-        assertNull(result);
+    void givenNullInput_whenWrap_thenThrowException() {
+        assertThrows(WordWrap.InputException.class, () -> wordWrap.wrap(null, 1));
     }
 
     @Test
-    void givenTestAnd7_whenWrap_thenReturnTest() {
+    void givenInputTest_whenWrap_thenReturnTest() {
         String expected;
         expected = "test";
         String result = wordWrap.wrap("test", 7);
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void givenTestWithTrailingSpaces_whenWrap_thenReturnTestWithoutTrailingSpaces() {
+        String expected = "test";
+        String result = wordWrap.wrap("  test   ", 7);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void givenWordsLongerThanLimit_whenWrap_thenReturnTwoLines() {
+        String expected = "hello\\nworld";
+        String result = wordWrap.wrap("hello world", 7);
+
+        assertEquals(expected, result);
+
     }
 }
