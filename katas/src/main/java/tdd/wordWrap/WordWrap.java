@@ -10,7 +10,7 @@ public class WordWrap {
         input = input.trim();
         StringBuilder result = new StringBuilder();
         while (input.length() > limit) {
-            String firstLineWithNewLine=
+            String firstLineWithNewLine =
                     getFirstLineWithAppendedNewLineCharacter(input, limit);
             result.append(firstLineWithNewLine);
             input = getTheRestOfInputForFurtherProcessing(input, limit);
@@ -20,13 +20,26 @@ public class WordWrap {
     }
 
     private String getTheRestOfInputForFurtherProcessing(String input, Integer limit) {
-        int index = getIndexOfLastSpaceOccurrence(input, limit);
-        return input.substring(index + WHITE_SPACE.length());
+        int breakPointIndex = getBreakPointIndex(input, limit);
+        if (WHITE_SPACE.equals("" + input.charAt(breakPointIndex))) {
+            return input.substring(breakPointIndex + WHITE_SPACE.length());
+        } else {
+            return input.substring(breakPointIndex);
+        }
     }
 
     private String getFirstLineWithAppendedNewLineCharacter(String input, Integer limit) {
-        int index = getIndexOfLastSpaceOccurrence(input, limit);
-        return input.substring(0, index) + NEW_LINE_CHARACTER;
+        int breakPointIndex = getBreakPointIndex(input, limit);
+        return input.substring(0, breakPointIndex) + NEW_LINE_CHARACTER;
+    }
+
+    private int getBreakPointIndex(String input, Integer limit) {
+        String potentialFirstLine = input.substring(0, limit + 1);
+        if (potentialFirstLine.contains(WHITE_SPACE)) {
+            return getIndexOfLastSpaceOccurrence(potentialFirstLine, limit);
+        } else {
+            return limit;
+        }
     }
 
     private static int getIndexOfLastSpaceOccurrence(String input, Integer limit) {

@@ -152,4 +152,24 @@ public class WordWrapTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    void givenOneWord_whenLimitLessThanWordLength_thenBreakWord() {
+        String expected = "hell\\no";
+        String input = "hello";
+
+        String result = wordWrap.wrap(input, 4);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void givenTwoWords_whenLimitLessThanFirstWordLength_thenBreakOnFirstWord() {
+        String expected = "hell\\no w\\norld";
+        String input = "hello world";
+
+        String result = wordWrap.wrap(input, 4);
+
+        assertEquals(expected, result);
+    }
 }
