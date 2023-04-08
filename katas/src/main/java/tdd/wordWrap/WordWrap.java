@@ -8,11 +8,12 @@ public class WordWrap {
     public String wrap(String input, Integer limit) {
         validate(input, limit);
         input = input.trim();
+
         StringBuilder result = new StringBuilder();
         while (input.length() > limit) {
-            String firstLineWithNewLine =
+            String firstLineWithNewLineChar =
                     getFirstLineWithAppendedNewLineCharacter(input, limit);
-            result.append(firstLineWithNewLine);
+            result.append(firstLineWithNewLineChar);
             input = getTheRestOfInputForFurtherProcessing(input, limit);
         }
         result.append(input);
@@ -30,13 +31,19 @@ public class WordWrap {
 
     private String getFirstLineWithAppendedNewLineCharacter(String input, Integer limit) {
         int breakPointIndex = getBreakPointIndex(input, limit);
-        return input.substring(0, breakPointIndex) + NEW_LINE_CHARACTER;
+        return input.substring(0, breakPointIndex).trim() + NEW_LINE_CHARACTER;
     }
 
     private int getBreakPointIndex(String input, Integer limit) {
         String potentialFirstLine = input.substring(0, limit + 1);
         if (potentialFirstLine.contains(WHITE_SPACE)) {
-            return getIndexOfLastSpaceOccurrence(potentialFirstLine, limit);
+            int indexOfSpace = getIndexOfLastSpaceOccurrence(potentialFirstLine, limit);
+            String[] words = input.substring(indexOfSpace + 1).split(WHITE_SPACE);
+            if (words.length > 0 && words[0].length() > limit) {
+               return limit;
+            } else {
+                return indexOfSpace;
+            }
         } else {
             return limit;
         }
