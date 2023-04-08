@@ -36,17 +36,22 @@ public class WordWrap {
 
     private int getBreakPointIndex(String input, Integer limit) {
         String potentialFirstLine = input.substring(0, limit + 1);
-        if (potentialFirstLine.contains(WHITE_SPACE)) {
-            int indexOfSpace = getIndexOfLastSpaceOccurrence(potentialFirstLine, limit);
-            String[] words = input.substring(indexOfSpace + 1).split(WHITE_SPACE);
-            if (words.length > 0 && words[0].length() > limit) {
-               return limit;
-            } else {
-                return indexOfSpace;
-            }
-        } else {
-            return limit;
-        }
+        return potentialFirstLine.contains(WHITE_SPACE)
+                ? getBreakingPointIndexIfOnWhiteSpace(input, limit, potentialFirstLine)
+                : limit;
+    }
+
+    private int getBreakingPointIndexIfOnWhiteSpace(String input, Integer limit, String potentialFirstLine) {
+        int indexOfSpace = getIndexOfLastSpaceOccurrence(potentialFirstLine, limit);
+        int wordLength = getFirstWordLength(input, indexOfSpace);
+        return wordLength <= limit
+                ? indexOfSpace
+                : limit;
+    }
+
+    private int getFirstWordLength(String input, int indexOfSpace) {
+        String[] words = input.substring(indexOfSpace + 1).split(WHITE_SPACE);
+        return words.length > 0 ? words[0].length() : 0;
     }
 
     private static int getIndexOfLastSpaceOccurrence(String input, Integer limit) {
