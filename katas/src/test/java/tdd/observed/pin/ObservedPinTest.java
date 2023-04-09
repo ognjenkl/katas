@@ -1,6 +1,14 @@
 package tdd.observed.pin;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 /*
 Alright, detective, one of our colleagues successfully observed
@@ -47,8 +55,24 @@ Detective, we are counting on you!
  */
 public class ObservedPinTest {
 
-    @Test
-    void givenOnePin_whenGetPINs_thenReturnListOfPins() {
+    static Stream<Arguments> arguments = Stream.of(
+            Arguments.of("1", List.of("1", "2", "4")),
+            Arguments.of("2", List.of("1", "2", "3", "5")),
+            Arguments.of("3", List.of("2", "6")),
+            Arguments.of("4", List.of("1", "4", "5", "7")),
+            Arguments.of("5", List.of("2", "4", "5", "6", "8")),
+            Arguments.of("6", List.of("3", "5", "9")),
+            Arguments.of("7", List.of("4", "8")),
+            Arguments.of("8", List.of("5", "7", "9", "0")),
+            Arguments.of("9", List.of("6", "8")),
+            Arguments.of("0", List.of("8"))
+    );
 
+    @ParameterizedTest
+    @VariableSource("arguments")
+    void givenOnePin_whenGetPINs_thenReturnListOfPins(String input, List<String> expected) {
+        List<String> list = ObservedPin.getPINs(input);
+
+        Assertions.assertEquals(expected, list);
     }
 }
