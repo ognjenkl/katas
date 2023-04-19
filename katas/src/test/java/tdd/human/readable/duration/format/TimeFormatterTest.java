@@ -60,6 +60,32 @@ unit of time.
 public class TimeFormatterTest {
 
     @Test
-    void test() {
+    void shouldReturn1Second() {
+        String result = TimeFormatter.formatDuration(1);
+        Assertions.assertEquals("1 second", result);
+    }
+
+    @Test
+    void shouldReturn2Seconds() {
+        String result = TimeFormatter.formatDuration(2);
+        Assertions.assertEquals("2 seconds", result);
+    }
+
+    @Test
+    void shouldReturn3Seconds() {
+        String result = TimeFormatter.formatDuration(3);
+        Assertions.assertEquals("3 seconds", result);
+    }
+
+    @Test
+    void shouldReturn59Seconds() {
+        String result = TimeFormatter.formatDuration(59);
+        Assertions.assertEquals("59 seconds", result);
+    }
+
+    @Test
+    void shouldReturn60Seconds() {
+        String result = TimeFormatter.formatDuration(60);
+        Assertions.assertEquals("1 minut", result);
     }
 }
