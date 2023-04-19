@@ -86,6 +86,54 @@ public class TimeFormatterTest {
     @Test
     void shouldReturn60Seconds() {
         String result = TimeFormatter.formatDuration(60);
-        Assertions.assertEquals("1 minut", result);
+        Assertions.assertEquals("1 minute", result);
+    }
+
+    @Test
+    void shouldReturn1Minute1Second() {
+        String result = TimeFormatter.formatDuration(61);
+        Assertions.assertEquals("1 minute and 1 second", result);
+    }
+
+    @Test
+    void shouldReturn1Minute2Seconds() {
+        String result = TimeFormatter.formatDuration(62);
+        Assertions.assertEquals("1 minute and 2 seconds", result);
+    }
+
+    @Test
+    void shouldReturn1Minute59Seconds() {
+        String result = TimeFormatter.formatDuration(119);
+        Assertions.assertEquals("1 minute and 59 seconds", result);
+    }
+
+    @Test
+    void shouldReturn2Minutes() {
+        String result = TimeFormatter.formatDuration(120);
+        Assertions.assertEquals("2 minutes", result);
+    }
+
+    @Test
+    void shouldReturn2Minutes1Second() {
+        String result = TimeFormatter.formatDuration(121);
+        Assertions.assertEquals("2 minutes and 1 second", result);
+    }
+
+    @Test
+    void shouldReturn2Minutes2Seconds() {
+        String result = TimeFormatter.formatDuration(122);
+        Assertions.assertEquals("2 minutes and 2 seconds", result);
+    }
+
+    @Test
+    void shouldReturn2Minutes3Seconds() {
+        String result = TimeFormatter.formatDuration(123);
+        Assertions.assertEquals("2 minutes and 3 seconds", result);
+    }
+
+    @Test
+    void shouldReturn59Minutes59Seconds() {
+        String result = TimeFormatter.formatDuration(3599);
+        Assertions.assertEquals("59 minutes and 59 seconds", result);
     }
 }
