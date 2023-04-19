@@ -1,13 +1,30 @@
 package tdd.observed.pin;
 
-import org.junit.jupiter.params.provider.Arguments;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ObservedPin {
     public static List<String> getPINs(String observed) {
-        return getPINLengthOne(observed);
+        return getPINList(observed);
+    }
+
+    private static List<String> getPINList(String observed) {
+        if (observed.length() == 1) {
+            return getPINLengthOne(observed);
+        } else if (observed.length() == 2) {
+            String[] ob = observed.split("");
+            List<String> list = new ArrayList<>();
+            for (String first : getPINLengthOne(ob[0])) {
+                for (String second : getPINLengthOne(ob[1])) {
+                    list.add(first + second);
+                }
+            }
+            return list;
+        } else {
+            String[] pins = observed.split("");
+            System.out.println(List.of(pins));
+            return new ArrayList<>();
+        }
     }
 
     private static List<String> getPINLengthOne(String observed) {

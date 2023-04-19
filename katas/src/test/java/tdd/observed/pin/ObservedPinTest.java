@@ -1,11 +1,8 @@
 package tdd.observed.pin;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -65,7 +62,8 @@ public class ObservedPinTest {
             Arguments.of("7", List.of("4", "8")),
             Arguments.of("8", List.of("5", "7", "9", "0")),
             Arguments.of("9", List.of("6", "8")),
-            Arguments.of("0", List.of("8"))
+            Arguments.of("0", List.of("8")),
+            Arguments.of("11", List.of("11", "12", "14", "21", "22", "24", "41", "42", "44"))
     );
 
     @ParameterizedTest
