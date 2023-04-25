@@ -20,6 +20,10 @@ public class TimeFormatter {
     public static final String DAY = "day";
     public static final String HOURS = "hours";
     public static final String HOUR = "hour";
+    private static final int SECONDS_PER_YEAR = 60 * 60 * 24 * 365;
+    private static final int SECONDS_PER_DAY = 60 * 60 * 24;
+    private static final int SECONDS_PER_HOUR = 60 * 60;
+    private static final int SECONDS_PER_MINUTE = 60;
     private static String retVal;
 
     public static String formatDuration(int seconds) {
@@ -34,15 +38,14 @@ public class TimeFormatter {
 
         retVal = EMPTY_STRING;
 
-        int years = seconds / (60 * 60 * 24 * 365);
-        int yearsMod = seconds % (60 * 60 * 24 * 365);
-        int days = yearsMod / (60 * 60 * 24);
-        int daysMod = yearsMod % (60 * 60 * 24);
-        int hours = daysMod / (60 * 60);
-        int hoursMod = daysMod % (60 * 60);
-        int minutes = hoursMod / 60;
-        int minutesMod = hoursMod % 60;
-        int secs = minutesMod % 60;
+        int years = seconds / SECONDS_PER_YEAR;
+        int yearsMod = seconds % SECONDS_PER_YEAR;
+        int days = yearsMod / SECONDS_PER_DAY;
+        int daysMod = yearsMod % SECONDS_PER_DAY;
+        int hours = daysMod / SECONDS_PER_HOUR;
+        int hoursMod = daysMod % SECONDS_PER_HOUR;
+        int minutes = hoursMod / SECONDS_PER_MINUTE;
+        int secs = hoursMod % SECONDS_PER_MINUTE;
 
         String yearsFormatted = formatUnits(years, YEARS, YEAR);
         processUnits(yearsFormatted, false);
