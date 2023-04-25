@@ -27,8 +27,7 @@ public class TimeFormatter {
         if (minutes > 0) {
             retVal = formatMinutes(minutes);
             if (secs > 0) {
-                retVal += DELIMITER;
-                retVal += formatSeconds(secs);
+                retVal += DELIMITER + formatSeconds(secs);
             }
         } else if (secs > 0) {
             retVal += formatSeconds(secs);
