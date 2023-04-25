@@ -136,4 +136,10 @@ public class TimeFormatterTest {
         String result = TimeFormatter.formatDuration(3599);
         Assertions.assertEquals("59 minutes and 59 seconds", result);
     }
+
+//    @Test
+//    void shouldReturn1Hour() {
+//        String result = TimeFormatter.formatDuration(3600);
+//        Assertions.assertEquals("1 hour", result);
+//    }
 }
